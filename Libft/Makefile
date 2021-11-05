@@ -1,0 +1,25 @@
+NAME=libft.a
+CC=gcc
+CFLAGS=-Wall -Wextra -Werror
+RM=rm -f
+SRC = ft_isalpha.c ft_isdigit.c
+OBJ = $(SRC:.c=.o)
+
+$(NAME): $(OBJ)
+		ar rc $(NAME) $(OBJ)
+		ranlib $(NAME)
+
+%.o: %.c
+		$(CC) -I. -o $@ -c $? $(CFLAGS)
+
+all: $(NAME)
+
+clean:
+		$(RM) $(OBJ)
+
+fclean: clean
+		$(RM) $(NAME)
+
+re: fclean all
+
+.PHONY: clean clean
