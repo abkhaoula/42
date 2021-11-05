@@ -1,6 +1,6 @@
 #include "libft.h"
 
-void	*ft_memset(void *s, int c, size_t n)
+void	ft_bzero(void *s, size_t n)
 {
 	char	*string_s;
 	size_t	i;
@@ -9,8 +9,7 @@ void	*ft_memset(void *s, int c, size_t n)
 	i = 0;
 	while (i < n)
 	{
-		string_s[i] = c;
+		string_s[i] = '\0';
 		i++;
 	}
-	return (s);
 }
