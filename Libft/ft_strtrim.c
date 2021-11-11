@@ -1,5 +1,4 @@
 #include "libft.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 int	start_trim(char const *s1, char const *set)
