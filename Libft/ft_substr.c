@@ -4,20 +4,20 @@
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t	i;
-	size_t	j;
 	char	*dup;
 
-	i = 0;
-	while ((s[i]) && (s[i] != (char)start))
-		i++;
-	if (!s[i])
-		return (NULL);
+	if (ft_strlen(s) < start)
+		return ("");
 	dup = malloc(sizeof(char) * (len + 1));
-	while ((s[i + j]) && (j < len))
+	if (!dup)
 	{
-		dup[j] = s[i + j];
-		j++;
+		return (NULL);
 	}
-	dup[j] = '\0';
+	i = 0;
+	while ((i < len) && (s[start + i]))
+	{
+		dup[i] = s[start + i];
+		i++;
+	}
 	return (dup);
 }
