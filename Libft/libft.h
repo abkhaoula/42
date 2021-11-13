@@ -12,6 +12,8 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include <stdio.h>
+
 typedef struct s_list
 {
 	void			*content;
