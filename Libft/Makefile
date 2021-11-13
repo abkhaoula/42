@@ -9,7 +9,9 @@ SRC			= ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 				ft_atoi.c ft_calloc.c ft_strdup.c ft_substr.c ft_strjoin.c \
 				ft_strtrim.c ft_split.c ft_itoa.c ft_strmapi.c ft_striteri.c \
 				ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c
+BONUS_SRC	= 
 OBJ			= $(SRC:.c=.o)
+BONUS_OBJ	= $(BONUS_SRC:.c=.o)
 
 $(NAME):	$(OBJ)
 				ar rc $(NAME) $(OBJ)
@@ -20,8 +22,12 @@ $(NAME):	$(OBJ)
 
 all:		$(NAME)
 
+bonus:		$(OBJ) $(BONUS_OBJ)
+				ar rc $(NAME) $(OBJ) $(BONUS_OBJ)
+				ranlib $(NAME)
+
 clean:
-				$(RM) $(OBJ)
+				$(RM) $(OBJ) $(BONUS_OBJ)
 
 fclean: 	clean
 				$(RM) $(NAME)
