@@ -17,8 +17,10 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	size_t	i;
 	char	*dup;
 
+	if (!s)
+		return (NULL);
 	if (ft_strlen(s) < start)
-		return ("");
+		return (ft_strdup(""));
 	dup = malloc(sizeof(char) * (len + 1));
 	if (!dup)
 	{
@@ -30,5 +32,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		dup[i] = s[start + i];
 		i++;
 	}
+	dup[i] = '\0';
 	return (dup);
 }

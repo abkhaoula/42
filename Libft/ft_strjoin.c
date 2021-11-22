@@ -12,6 +12,18 @@
 #include "libft.h"
 #include <stdlib.h>
 
+static char	*protect(char const *s1, char const *s2)
+{
+	if (!s1 && !s2)
+		return (ft_strdup(""));
+	if (!s2)
+		return (ft_strdup(s1));
+	if (!s1)
+		return (ft_strdup(s2));
+	else
+		return (NULL);
+}
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	int		len;
@@ -19,6 +31,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	int		j;
 	char	*joint;
 
+	if ((!s1 && !s2) || (!s2) || (!s1))
+		return (protect(s1, s2));
 	len = ft_strlen(s1) + ft_strlen(s2);
 	joint = malloc(sizeof(char) * (len + 1));
 	if (!joint)

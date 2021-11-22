@@ -12,57 +12,112 @@
 #include "libft.h"
 #include <stdlib.h>
 
-int	split_count(char const *s, char c)
+static int	word_num(char const *s, char c)
 {
-	int	i;
-	int	count;
+	size_t	nbr;
+	int		i;
 
+	nbr = 0;
 	i = 0;
-	count = 0;
 	while (s[i])
 	{
-		if (s[i] == c)
-			count++;
-		i++;
+		while (s[i] == c)
+			i++;
+		if (i > 0 && s[i] && s[i - 1] == c)
+			nbr++;
+		if (s[i])
+			i++;
 	}
-	return (count);
+	if (nbr == 0 && s[0] != c)
+		return (1);
+	if (nbr == 0 && s[i - 1] == c)
+		return (0);
+	if (s[0] != c)
+		nbr++;
+	return (nbr);
 }
 
-int	word_len(char const *s, char c, int position)
+static char	**mal(char **strs, char const *s, char c)
+{
+	size_t	count;
+	int		i;
+	int		h;
+
+	count = 0;
+	i = 0;
+	h = 0;
+	while (s[h])
+	{
+		if (s[h] != c)
+			count++;
+		else if (h > 0 && s[h - 1] != c)
+		{
+			strs[i] = malloc(sizeof(char) * (count + 1));
+			if (!strs[i])
+				return (0);
+			count = 0;
+			i++;
+		}
+		if (s[h + 1] == '\0' && s[h] != c)
+			strs[i] = malloc(sizeof(char) * count + 1);
+		h++;
+	}
+	return (strs);
+}
+
+static char	**copy(char **strs, char const *s, char c)
 {
 	int	i;
+	int	j;
+	int	h;
 
 	i = 0;
-	while ((s[i + position]) && (s[i + position] != c))
-		i++;
-	return (i);
+	j = 0;
+	h = 0;
+	while (s[h])
+	{
+		if (s[h] != c)
+			strs[i][j++] = s[h];
+		else if (h > 0 && s[h - 1] != c)
+		{
+			if (h != 0)
+			{
+				strs[i][j] = '\0';
+				j = 0;
+				i++;
+			}
+		}
+		if (s[h + 1] == '\0' && s[h] != c)
+			strs[i][j] = '\0';
+		h++;
+	}
+	return (strs);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	int		i;
-	int		j;
-	int		position;
-	int		count;
-	char	**p;
+	char	**rtn;
+	int		nbr_w;
 
-	count = split_count(s, c);
-	p = malloc(sizeof(char *) * (count + 2));
-	j = 0;
-	position = 0;
-	while (j < count + 1)
+	if (!s || !*s)
 	{
-		p[j] = malloc(sizeof(char) * (word_len(s, c, position) + 1));
-		i = 0;
-		while ((s[i + position]) && (s[i + position] != c))
-		{
-			p[j][i] = s[i + position];
-			i++;
-		}
-		p[j][i] = '\0';
-		position = position + i + 1;
-		j++;
+		rtn = malloc(sizeof(char *) * 1);
+		if (!rtn)
+			return (NULL);
+		*rtn = (void *)0;
+		return (rtn);
 	}
-	p[j] = NULL;
-	return (p);
+	nbr_w = word_num(s, c);
+	rtn = malloc(sizeof(char *) * (nbr_w + 1));
+	if (!rtn)
+		return (0);
+	if (mal(rtn, s, c) != 0)
+		copy(rtn, s, c);
+	else
+	{
+		free(rtn);
+		return (NULL);
+	}
+	rtn[nbr_w] = (void *)0;
+	return (rtn);
 }

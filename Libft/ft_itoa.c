@@ -12,51 +12,67 @@
 #include "libft.h"
 #include <stdlib.h>
 
-int	*num_len(int n)
+static int	estim(long n)
 {
-	int	i;
-	int	tens;
-	int	*t;
+	size_t	estim;
+	int		isneg;
 
-	t = malloc(sizeof(int) * 2);
-	i = 0;
-	tens = 1;
-	while (((n / tens) != 0) && (tens < 1000000000))
+	estim = 0;
+	isneg = 0;
+	if (n < 0)
 	{
-		i++;
-		tens = tens * 10;
+		estim++;
+		isneg++;
+		n = -n;
 	}
-	if ((n != 0) && ((n / tens) == 0))
-		tens = tens / 10;
-	t[0] = i;
-	t[1] = tens;
-	return (t);
+	while (n >= 1)
+	{
+		estim++;
+		n /= 10;
+	}
+	return (estim);
+}
+
+static char	*gen(char *rtn, long nbr, int len, int isneg)
+{
+	if (nbr != 0)
+		rtn = malloc(sizeof(char) * (len + 1));
+	else
+		return (rtn = ft_strdup("0"));
+	if (!rtn)
+		return (0);
+	isneg = 0;
+	if (nbr < 0)
+	{
+		isneg++;
+		nbr = -nbr;
+	}
+	rtn[len] = '\0';
+	while (--len)
+	{
+		rtn[len] = (nbr % 10) + '0';
+		nbr /= 10;
+	}
+	if (isneg == 1)
+		rtn[0] = '-';
+	else
+		rtn[0] = (nbr % 10) + '0';
+	return (rtn);
 }
 
 char	*ft_itoa(int n)
 {
-	int		tens;
-	int		i;
-	char	*num;
+	int		len;
+	char	*rtn;
+	long	nbr;
+	int		isneg;
 
-	if (n == -2147483648)
-		return ("-2147483648");
-	tens = num_len(n)[1];
-	num = malloc(sizeof(char) * (num_len(n)[0] + 2));
-	i = 0;
-	if (n < 0)
-	{
-		num[i] = '-';
-		n = n * (-1);
-		i++;
-	}
-	while (tens > 0)
-	{
-		num[i] = '0' + (n / tens);
-		n = n % tens;
-		tens = tens / 10;
-		i++;
-	}
-	num[i] = '\0';
-	return (num);
+	nbr = n;
+	len = estim(nbr);
+	rtn = 0;
+	isneg = 0;
+	rtn = gen(rtn, nbr, len, isneg);
+	if (!rtn)
+		return (0);
+	return (rtn);
 }
