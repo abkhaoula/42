@@ -80,6 +80,4 @@ char	*get_next_line(int fd)
 			return (next_line);
 		i = 0;
 	}
-	next_buff[i] = '\0';
-	return (next_buff);
 }
