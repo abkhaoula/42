@@ -18,7 +18,7 @@
 char	*protecte_gnl(int fd)
 {
 	char	*next_buff;
-    char	tmp;
+	char	tmp;
 	int		isnt_eof;
 
 	if ((BUFFER_SIZE <= 0) || (fd == -1))
@@ -73,10 +73,7 @@ char	*get_next_line(int fd)
 	while (1)
 	{
 		while (i < BUFFER_SIZE && (!stop))
-		{
-			stop = next_stop(fd, &next_buff, i);
-			i++;
-		}
+			stop = next_stop(fd, &next_buff, i++);
 		next_line = ft_strjoin(next_line, next_buff);
 		if (stop)
 		{
