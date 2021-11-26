@@ -1,5 +1,4 @@
 NAME		=libft.a
-BONUS_NAME	=libft.a
 CC			=gcc
 CFLAGS		=-Wall -Wextra -Werror
 RM			=rm -f
@@ -21,16 +20,14 @@ $(NAME):	$(OBJ)
 				ar rc $(NAME) $(OBJ)
 				ranlib $(NAME)
 
-$(BONUS_NAME):	$(OBJ) $(BONUS_OBJ)
-				ar rc $(BONUS_NAME) $(OBJ) $(BONUS_OBJ)
-				ranlib $(BONUS_NAME)
-
 %.o:		%.c
 				$(CC) -I. -o $@ -c $? $(CFLAGS)
 
 all:		$(NAME)
 
-bonus:		$(BONUS_NAME)
+bonus:		$(OBJ) $(BONUS_OBJ)
+				ar rc $(BONUS_NAME) $(OBJ) $(BONUS_OBJ)
+				ranlib $(BONUS_NAME)
 
 clean:
 				$(RM) $(OBJ) $(BONUS_OBJ)
