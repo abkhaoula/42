@@ -18,20 +18,22 @@
 char	*protecte_gnl(int fd)
 {
 	char	*next_buff;
+    char	tmp;
 	int		isnt_eof;
 
 	if ((BUFFER_SIZE <= 0) || (fd == -1))
 		return (NULL);
-	next_buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!next_buff)
-		return (NULL);
-	isnt_eof = read(fd, &next_buff[0], 1);
+	isnt_eof = read(fd, &tmp, 1);
 	if (isnt_eof <= 0)
 		return (NULL);
 	if (!isnt_eof)
 		return (ft_strdup("\0"));
-	if (next_buff[0] == '\n')
+	if (tmp == '\n')
 		return (ft_strdup("\n"));
+	next_buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!next_buff)
+		return (NULL);
+	next_buff[0] = tmp;
 	return (next_buff);
 }
 
@@ -77,7 +79,10 @@ char	*get_next_line(int fd)
 		}
 		next_line = ft_strjoin(next_line, next_buff);
 		if (stop)
+		{
+			free(next_buff);
 			return (next_line);
+		}
 		i = 0;
 	}
 }
