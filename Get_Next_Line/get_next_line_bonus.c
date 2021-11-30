@@ -9,7 +9,7 @@
 /*   Updated: 2021/11/23 16:28:00 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*get_leftover(char *leftover)
 {
@@ -56,15 +56,15 @@ char	*get_line(char *leftover)
 
 char	*get_next_line(int fd)
 {
-	static char	*leftover;
+	static char	*leftover[1024];
 	char		*next_line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= 1024)
 		return (NULL);
-	leftover = read_file(fd, leftover);
-	if (!leftover)
+	leftover[fd] = read_file(fd, leftover[fd]);
+	if (!leftover[fd])
 		return (NULL);
-	next_line = get_line(leftover);
-	leftover = get_leftover(leftover);
+	next_line = get_line(leftover[fd]);
+	leftover[fd] = get_leftover(leftover[fd]);
 	return (next_line);
 }
