@@ -9,6 +9,7 @@
 /*   Updated: 2021/12/30 16:28:00 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "ft_printf.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <unistd.h>
@@ -195,7 +196,7 @@ static char	*gen(char *rtn, long nbr, int len, int isneg)
 	return (rtn);
 }
 
-char	*ft_itoa(int n)
+void	ft_itoa(int n, int *count, int *i)
 {
 	int		len;
 	char	*rtn;
@@ -208,8 +209,9 @@ char	*ft_itoa(int n)
 	isneg = 0;
 	rtn = gen(rtn, nbr, len, isneg);
 	if (!rtn)
-		return (0);
-	return (rtn);
+		return ;
+	ft_putstr(rtn, count, i);
+	free(rtn);
 }
 
 void    conversions(const char *message, int *i, va_list arguments, int *count)
@@ -228,15 +230,15 @@ void    conversions(const char *message, int *i, va_list arguments, int *count)
 	}
 	else if (message[(*i)+1] == 'd')
 	{
-		ft_putstr(ft_itoa(va_arg(arguments, int)), count, i);
+		ft_itoa(va_arg(arguments, int), count, i);
 	}
 	else if (message[(*i)+1] == 'i')
 	{
-		ft_putstr(ft_itoa(va_arg(arguments, int)), count, i);
+		ft_itoa(va_arg(arguments, int), count, i);
 	}
-	else if (message[(*i)+1] == 'u')//
+	else if (message[(*i)+1] == 'u')
 	{
-		ft_putstr(ft_itoa((int) va_arg(arguments, unsigned int)), count, i);
+		ft_itoa((int) va_arg(arguments, unsigned int), count, i);
 	}
 	else if (message[(*i)+1] == 'x')
 	{
