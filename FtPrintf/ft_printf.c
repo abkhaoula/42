@@ -100,13 +100,18 @@ void	put_adress(unsigned long int s, int *count, int *i)
 {
 	if (!s)
 	{
-		return ;
+        write(1, "(nil)", 5);
+        (*count) = (*count) + 5;
+        (*i)++;
 	}
-	write(1, "0x", 2);
-	(*count)++;
-	(*count)++;
-	hex_div(s, count, 1);
-	(*i)++;
+    else
+    {
+	    write(1, "0x", 2);
+	    (*count)++;
+	    (*count)++;
+	    hex_div(s, count, 1);
+	    (*i)++;
+    }
 }
 
 static int	estim(long n)
@@ -233,9 +238,7 @@ int	ft_printf(const char *message, ...)
     {
         if (message[i] == '%')
         {
-			//printf("%i\n", i);
-			conversions(message, &i, arguments, &count);
-			//printf("%i\n", i);	
+			conversions(message, &i, arguments, &count);	
 		}
         else
         {
