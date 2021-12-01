@@ -69,36 +69,6 @@ void	ft_putstr(char *s, int *count, int *i)
     (*i)++;
 }
 
-int	hex_div(long int s)
-{
-	long int tmp;
-	int i;
-
-	i = 0;
-	tmp = s;
-	while(tmp)
-	{
-		tmp = tmp / 16;
-		i++;
-	}
-	return(i);
-}
-
-long int pow_init(int i)
-{
-	int n;
-	long int pow;
-
-	pow = 1;
-	n = 0;
-	while (n < i)
-	{
-		pow = pow * 16;
-		n++;
-	}
-	return (pow);
-}
-
 void hex_digit_write(int num, int islower)
 {
 	char	w;
@@ -114,29 +84,16 @@ void hex_digit_write(int num, int islower)
 	write(1, &w, 1);
 }
 
-void	putnbr_hex(long int s, int *count, int islower)
+void	hex_div(unsigned long int s, int *count, int islower)
 {
-	int i;
-	int	n;
-	long int	pow;
-	long int tmp;
-
-	i = hex_div(s);
-	pow = pow_init(i);
-	n = 0;
-	tmp = 0;
-	while (i)
-	{
-		n = 0;
-		s = s - (tmp * pow);
-		tmp = s;
-		while (n++ < i - 1)
-			tmp = tmp / 16;
-		i--;
-		hex_digit_write(tmp, islower);
-		pow = pow / 16;
-		(*count)++;
-	}
+    if (s < 16)
+        hex_digit_write(s, islower);
+    else
+    {
+        hex_div(s/16, count, islower);
+        hex_digit_write((s%16), islower);
+    }
+    (*count)++;
 }
 
 void	put_adress(unsigned long int s, int *count, int *i)
@@ -148,7 +105,7 @@ void	put_adress(unsigned long int s, int *count, int *i)
 	write(1, "0x", 2);
 	(*count)++;
 	(*count)++;
-	putnbr_hex(s, count, 1);
+	hex_div(s, count, 1);
 	(*i)++;
 }
 
@@ -246,12 +203,12 @@ void    conversions(const char *message, int *i, va_list arguments, int *count)
 	}
 	else if (message[(*i)+1] == 'x')
 	{
-		putnbr_hex(va_arg(arguments, unsigned long int), count, 1);
+		hex_div(va_arg(arguments, unsigned long int), count, 1);
 		(*i)++;
 	}
 	else if (message[(*i)+1] == 'X')
 	{
-		putnbr_hex(va_arg(arguments, unsigned long int), count, 0);
+		hex_div(va_arg(arguments, unsigned long int), count, 0);
 		(*i)++;
 	}
 	else if (message[(*i)+1] == '%')
