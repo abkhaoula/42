@@ -58,11 +58,15 @@ void	ft_putstr(char *s, int *count, int *i)
 {
 	if (!s)
 	{
-		return ;
+		write(1, "(null)", 6);
+        (*count) = (*count) + 6;
 	}
-	write(1, s, ft_strlen(s));
-	(*i)++;
-	(*count) = (*count) + ft_strlen(s);
+    else
+    {
+        write(1, s, ft_strlen(s));
+        (*count) = (*count) + ft_strlen(s);
+    }
+    (*i)++;
 }
 
 int	hex_div(long int s)
