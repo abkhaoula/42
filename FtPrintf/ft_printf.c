@@ -180,6 +180,37 @@ void	ft_itoa(int n, int *count, int *i)
 	free(rtn);
 }
 
+static int	estim_u(unsigned long n)
+{
+	size_t	estim;
+
+	estim = 0;
+	while (n >= 1)
+	{
+		estim++;
+		n /= 10;
+	}
+	return (estim);
+}
+
+void	ft_itoa_u(unsigned int n, int *count, int *i)
+{
+	int		len;
+	char	*rtn;
+	unsigned long	nbr;
+	int		isneg;
+
+	nbr = n;
+	len = estim_u(nbr);
+	rtn = 0;
+	isneg = 0;
+	rtn = gen(rtn, nbr, len, isneg);
+	if (!rtn)
+		return ;
+	ft_putstr(rtn, count, i);
+	free(rtn);
+}
+
 void    conversions(const char *message, int *i, va_list arguments, int *count)
 {
 	if (message[(*i)+1] == 'c')
@@ -204,7 +235,7 @@ void    conversions(const char *message, int *i, va_list arguments, int *count)
 	}
 	else if (message[(*i)+1] == 'u')
 	{
-		ft_itoa((int) va_arg(arguments, unsigned int), count, i);
+		ft_itoa_u(va_arg(arguments, unsigned int), count, i);
 	}
 	else if (message[(*i)+1] == 'x')
 	{
