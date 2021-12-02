@@ -239,12 +239,12 @@ void    conversions(const char *message, int *i, va_list arguments, int *count)
 	}
 	else if (message[(*i)+1] == 'x')
 	{
-		hex_div(va_arg(arguments, unsigned long int), count, 1);
+		hex_div(va_arg(arguments, unsigned), count, 1);
 		(*i)++;
 	}
 	else if (message[(*i)+1] == 'X')
 	{
-		hex_div(va_arg(arguments, unsigned long int), count, 0);
+		hex_div(va_arg(arguments, unsigned), count, 0);
 		(*i)++;
 	}
 	else if (message[(*i)+1] == '%')
