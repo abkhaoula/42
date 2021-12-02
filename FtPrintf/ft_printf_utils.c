@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_printf_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kabdenou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,19 +9,48 @@
 /*   Updated: 2021/12/30 16:28:00 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "ft_printf.h"
+#include <unistd.h>
 
-# include <stdio.h>
+void	hex_digit_write(int num, int islower)
+{
+	char	w;
+	char	a;
 
-int		ft_printf(const char *message, ...);
-void	ft_itoa(int n, int *count);
-void	ft_itoa_u(unsigned int n, int *count);
-void	ft_putstr(char *s, int *count);
-char	*ft_strdup(const char *s);
-size_t	ft_strlen(const char *s);
-void	ft_putchar(char c, int *count);
-void	hex_div(unsigned long int s, int *count, int islower);
-void	put_adress(unsigned long int s, int *count);
+	a = 'A';
+	if (islower)
+		a = 'a';
+	if (num < 10)
+		w = '0' + num;
+	else
+		w = a + num - 10;
+	write(1, &w, 1);
+}
 
-#endif
+void	hex_div(unsigned long int s, int *count, int islower)
+{
+	if (s < 16)
+		hex_digit_write(s, islower);
+	else
+	{
+		hex_div(s / 16, count, islower);
+		hex_digit_write((s % 16), islower);
+	}
+	(*count)++;
+}
+
+void	put_adress(unsigned long int s, int *count)
+{
+	if (!s)
+	{
+		write(1, "(nil)", 5);
+		(*count) = (*count) + 5;
+	}
+	else
+	{
+		write(1, "0x", 2);
+		(*count)++;
+		(*count)++;
+		hex_div(s, count, 1);
+	}
+}
