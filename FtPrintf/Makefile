@@ -15,6 +15,8 @@ $(NAME):	$(OBJ)
 
 all:		$(NAME)
 
+bonus:		$(NAME)
+
 clean:
 				$(RM) $(OBJ) $(BONUS_OBJ)
 
