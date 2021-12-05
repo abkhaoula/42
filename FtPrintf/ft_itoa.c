@@ -77,3 +77,23 @@ void	ft_itoa(int n, int *count)
 	ft_putstr(rtn, count);
 	free(rtn);
 }
+
+int	ft_itoa_count(int n)
+{
+	int		len;
+	char	*rtn;
+	long	nbr;
+	int		isneg;
+    int		count;
+
+	nbr = n;
+	len = estim(nbr);
+	rtn = 0;
+	isneg = 0;
+	rtn = gen(rtn, nbr, len, isneg);
+	if (!rtn)
+		return (0);
+	count = ft_strlen(rtn);
+	free(rtn);
+	return (count);
+}

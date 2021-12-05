@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_utils.c                                  :+:      :+:    :+:   */
+/*   plus_flag_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kabdenou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,60 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
+#include <stdio.h>
+#include <stdarg.h>
 #include <unistd.h>
+#include <stdlib.h>
 
-void	hex_digit_write(int num, int islower)
+void	plus_flag(va_list arguments, int *count, int *i)
 {
-	char	w;
-	char	a;
+	int	num;
 
-	a = 'A';
-	if (islower)
-		a = 'a';
-	if (num < 10)
-		w = '0' + num;
-	else
-		w = a + num - 10;
-	write(1, &w, 1);
-}
-
-void	hex_div(unsigned long int s, int *count, int islower)
-{
-	if (s < 16)
-		hex_digit_write(s, islower);
-	else
+	num = va_arg(arguments, int);
+	if (num >= 0)
 	{
-		hex_div(s / 16, count, islower);
-		hex_digit_write((s % 16), islower);
-	}
-	(*count)++;
-}
-
-int	hex_div_count(unsigned long int s, int islower)
-{
-    int count;
-
-    count = 0;
-	if (!(s < 16))
-    {
-		count = count + hex_div_count(s / 16, islower);
-    }
-	(count)++;
-    return (count);
-}
-
-void	put_adress(unsigned long int s, int *count)
-{
-	if (!s)
-	{
-		write(1, "(nil)", 5);
-		(*count) = (*count) + 5;
-	}
-	else
-	{
-		write(1, "0x", 2);
+		write(1, "+", 1);
 		(*count)++;
-		(*count)++;
-		hex_div(s, count, 1);
 	}
+	ft_itoa(num, count);
+	(*i)++;
 }

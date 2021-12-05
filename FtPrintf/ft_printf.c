@@ -40,24 +40,6 @@ void	conversions(const char *message, va_list arguments, int *count, int i)
 	}
 }
 
-void	conversions_bonus(const char *message, va_list arguments, int *count, int *i)
-{
-    int num;
-    if (message[(*i) + 1] == '+')
-    {
-        num = va_arg(arguments, int);
-        if (num >= 0)
-        {
-            write(1, "+", 1);
-            (*count)++;
-        }
-        ft_itoa(num, count);
-        (*i)++;
-    }
-    else
-        conversions(message, arguments, count, (*i));
-}
-
 int	ft_printf(const char *message, ...)
 {
 	int		count;
