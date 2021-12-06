@@ -41,15 +41,15 @@ void	hex_div(unsigned long int s, int *count, int islower)
 
 int	hex_div_count(unsigned long int s, int islower)
 {
-    int count;
+	int	count;
 
-    count = 0;
+	count = 0;
 	if (!(s < 16))
-    {
+	{
 		count = count + hex_div_count(s / 16, islower);
-    }
+	}
 	(count)++;
-    return (count);
+	return (count);
 }
 
 void	put_adress(unsigned long int s, int *count)
