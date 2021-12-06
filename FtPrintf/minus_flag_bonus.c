@@ -15,23 +15,23 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-void	minus_flag(const char *message, va_list arguments, int *count, int *i)
+static int	read_num(const char *message, int *i)
 {
-	int		num;
 	int		size;
 	char	*s;
 	int		space;
-	int		count_indent;
 
 	size = 0;
-	while ((message[(*i) + 2 + size] <= '9') && (message[(*i) + 2 + size] >= '0'))
+	while ((message[(*i) + 2 + size] <= '9')
+		&& (message[(*i) + 2 + size] >= '0'))
 		size++;
 	size++;
 	s = malloc(size * sizeof(char));
 	if (!s)
-		return ;
+		return (0);
 	size = 0;
-	while ((message[(*i) + 2 + size] <= '9') && (message[(*i) + 2 + size] >= '0'))
+	while ((message[(*i) + 2 + size] <= '9')
+		&& (message[(*i) + 2 + size] >= '0'))
 	{
 		s[size] = message[(*i) + 2 + size];
 		size++;
@@ -40,6 +40,16 @@ void	minus_flag(const char *message, va_list arguments, int *count, int *i)
 	space = ft_atoi(s);
 	free(s);
 	(*i) = (*i) + size + 1;
+	return (space);
+}
+
+void	minus_flag(const char *message, va_list arguments, int *count, int *i)
+{
+	int		num;
+	int		space;
+	int		count_indent;
+
+	space = read_num(message, i);
 	count_indent = (*count);
 	if ((message[(*i) + 1] == 'd') || (message[(*i) + 1] == 'i'))
 	{
@@ -49,7 +59,7 @@ void	minus_flag(const char *message, va_list arguments, int *count, int *i)
 	else
 		conversions(message, arguments, count, (*i));
 	count_indent = (*count) - count_indent;
-	while(space - count_indent > 0)
+	while (space - count_indent > 0)
 	{
 		write(1, " ", 1);
 		(*count)++;
