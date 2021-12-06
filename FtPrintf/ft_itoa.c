@@ -84,7 +84,7 @@ int	ft_itoa_count(int n)
 	char	*rtn;
 	long	nbr;
 	int		isneg;
-    int		count;
+	int		count;
 
 	nbr = n;
 	len = estim(nbr);
