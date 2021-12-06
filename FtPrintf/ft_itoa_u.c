@@ -76,7 +76,7 @@ int	ft_itoa_u_count(unsigned int n)
 	char			*rtn;
 	unsigned long	nbr;
 	int				isneg;
-    int				count;
+	int				count;
 
 	nbr = n;
 	len = estim_u(nbr);
