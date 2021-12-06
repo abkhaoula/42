@@ -15,20 +15,19 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-
 static int	is_neg(char *nptr, int *i)
 {
-    size_t	is_negative;
+	size_t	is_negative;
 
-    is_negative = 0;
-    if (nptr[*i] == '-')
-    {
-        (*i)++;
-        is_negative = 1;
-    }
-    else if (nptr[*i] == '+')
-        (*i)++;
-    return (is_negative);
+	is_negative = 0;
+	if (nptr[*i] == '-')
+	{
+		(*i)++;
+		is_negative = 1;
+	}
+	else if (nptr[*i] == '+')
+		(*i)++;
+	return (is_negative);
 }
 
 int	ft_atoi(char *nptr)
@@ -39,7 +38,7 @@ int	ft_atoi(char *nptr)
 
 	i = 0;
 	while ((nptr[i]) && (nptr[i] == '\t' || nptr[i] == '\v' || nptr[i] == '\f'
-		|| nptr[i] == '\r' || nptr[i] == '\n' || nptr[i] == ' '))
+			|| nptr[i] == '\r' || nptr[i] == '\n' || nptr[i] == ' '))
 		i++;
 	is_negative = is_neg(nptr, &i);
 	num = 0;
