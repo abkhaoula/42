@@ -26,11 +26,11 @@ static int	is_neg(const char *nptr, int *i)
 	return (is_negative);
 }
 
-int	ft_atoi(const char *nptr)
+long	ft_atoi(const char *nptr)
 {
 	int		i;
 	size_t	is_negative;
-	int		num;
+	long	num;
 
 	i = 0;
 	while (nptr[i] == '\t' || nptr[i] == '\v' || nptr[i] == '\f'

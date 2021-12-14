@@ -14,7 +14,11 @@
 
 # include <stdio.h>
 
-int		ft_atoi(const char *nptr);
-size_t	ft_strlen(const char *s);
+long		ft_atoi(const char *nptr);
+size_t		ft_strlen(const char *s);
+long int	*read_check_stack(int argc, char *argv[]);
+int			is_sorted(long int *a, int argc);
+void		translate(long int *a[], int argc);
+int			**itob(long int *a, int argc);
 
 #endif

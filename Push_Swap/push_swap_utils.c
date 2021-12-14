@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   push_swap_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kabdenou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,23 +10,41 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "push_swap.h"
-#include <stdlib.h>
 
-int	main(int argc, char *argv[])
+int	is_sorted(long int *a, int argc)
 {
-	long int	*a;
-	int			**a_stack;
+	int	i;
 
-	a = read_check_stack(argc, argv);
-	if (!a)
-		return (0);
-	if (is_sorted(a, argc))
-		return (1);
-	translate(&a, argc);
-	a_stack = itob(a, argc);
-	free(a);
-	if (!a_stack)
-		return (0);
-	printf("To be sorted\n");
+	i = 0;
+	while (i < argc - 2)
+	{
+		if (a[i] > a[i + 1])
+			return (0);
+		i++;
+	}
 	return (1);
+}
+
+void	translate(long int *a[], int argc)
+{
+	long int	min;
+	int			i;
+
+	min = (*a)[0];
+	i = 1;
+	while (i < argc)
+	{
+		if (min > (*a)[i])
+			min = (*a)[i];
+		i++;
+	}
+	if (min < 0)
+	{
+		i = 0;
+		while (i < argc - 1)
+		{
+			(*a)[i] -= min;
+			i++;
+		}
+	}
 }
