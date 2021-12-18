@@ -69,7 +69,7 @@ void	pab(int ***stack1, int ***stack2, int argc)
 	free(tmp);
 }
 
-void	rab(int ***stack, int argc)
+void	rab(int ***stack, int argc, int end)
 {
 	int	*tmp;
 	int	i;
@@ -81,12 +81,12 @@ void	rab(int ***stack, int argc)
 	{
 		copy(&(*stack)[0], &tmp);
 		i = 0;
-		while (i < argc - 2)
+		while (i < end)
 		{
 			copy(&(*stack)[i + 1], &(*stack)[i]);
 			i++;
 		}
-		copy(&tmp, &(*stack)[argc - 2]);
+		copy(&tmp, &(*stack)[end]);
 	}
 	free(tmp);
 }

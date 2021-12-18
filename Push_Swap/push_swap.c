@@ -71,7 +71,7 @@ void	sort(int ***a_stack, int ***b_stack, int argc)
 			}
 			else
 			{
-				rab(a_stack, argc);
+				rab(a_stack, argc, argc - 2 - count);
 				printf("ra\n");
 			}
 			j++;

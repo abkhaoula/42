@@ -22,7 +22,7 @@ void	simplify(int *a[], int argc);
 int		**itob(int *a, int argc);
 void	sab(int ***stack, int argc);
 void	pab(int ***stack1, int ***stack2, int argc);
-void	rab(int ***stack, int argc);
+void	rab(int ***stack, int argc, int end);
 void	rrab(int ***stack, int argc);
 
 #endif
