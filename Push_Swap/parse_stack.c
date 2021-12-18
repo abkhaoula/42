@@ -22,14 +22,14 @@ static int	in_int_range(char *argv[], int i)
 	return (1);
 }
 
-static long int	*read_stack(int argc, char *argv[])
+static int	*read_stack(int argc, char *argv[])
 {
-	int			i;
-	int			j;
-	long int	*stack;
+	int	i;
+	int	j;
+	int	*stack;
 
 	i = 0;
-	stack = malloc((argc + 1) * sizeof(long int));
+	stack = malloc((argc - 1) * sizeof(int));
 	while ((stack) && (i < (argc - 1)))
 	{
 		j = 0;
@@ -50,11 +50,11 @@ static long int	*read_stack(int argc, char *argv[])
 	return (stack);
 }
 
-long int	*read_check_stack(int argc, char *argv[])
+int	*read_check_stack(int argc, char *argv[])
 {
-	long int	*stack;
-	int			i;
-	int			j;
+	int	*stack;
+	int	i;
+	int	j;
 
 	if (argc <= 1)
 	{

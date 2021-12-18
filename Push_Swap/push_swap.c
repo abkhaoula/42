@@ -36,23 +36,74 @@ int	**stack_to_void(int argc)
 	return (stack);
 }
 
+int	isnt_end(int **stack, int j, int argc)
+{
+	int	i;
+
+	i = 0;
+	while (i < argc - 1)
+	{
+		if (stack[i][j] != -1)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	sort(int ***a_stack, int ***b_stack, int argc)
+{
+	int	i;
+	int	j;
+	int	count;
+
+	i = 0;
+	while (isnt_end((*a_stack), i, argc))
+	{
+		j = 0;
+		count = 0;
+		while (j < argc - 1)
+		{
+			if (((*a_stack)[0][i] == 0) || ((*a_stack)[0][i] == -1))
+			{
+				pab(b_stack, a_stack, argc);
+				printf("pb\n");
+				count++;
+			}
+			else
+			{
+				rab(a_stack, argc);
+				printf("ra\n");
+			}
+			j++;
+		}
+		j = 0;
+		while (j < count)
+		{
+			pab(a_stack, b_stack, argc);
+			printf("pa\n");
+			j++;
+		}
+		i++;
+	}
+}
+
 int	main(int argc, char *argv[])
 {
-	long int	*a;
-	int			**a_stack;
-	int			**b_stack;
+	int	*a;
+	int	**a_stack;
+	int	**b_stack;
 
 	a = read_check_stack(argc, argv);
 	if (!a)
 		return (0);
 	if (is_sorted(a, argc))
 		return (1);
-	translate(&a, argc);
+	simplify(&a, argc);
 	a_stack = itob(a, argc);
 	free(a);
 	b_stack = stack_to_void(argc);
 	if ((!a_stack) || (!b_stack))
 		return (0);
-	printf("To be sorted\n");
+	sort(&a_stack, &b_stack, argc);
 	return (1);
 }

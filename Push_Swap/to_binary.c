@@ -12,7 +12,7 @@
 #include "push_swap.h"
 #include <stdlib.h>
 
-static void	tobinary(long int a, int **a_stack)
+static void	tobinary(int a, int **a_stack)
 {
 	int	i;
 
@@ -32,7 +32,7 @@ static void	tobinary(long int a, int **a_stack)
 	}
 }
 
-int	**itob(long int *a, int argc)
+int	**itob(int *a, int argc)
 {
 	int	**a_stack;
 	int	i;

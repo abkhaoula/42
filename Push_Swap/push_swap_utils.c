@@ -10,8 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "push_swap.h"
+#include <stdlib.h>
 
-int	is_sorted(long int *a, int argc)
+int	is_sorted(int *a, int argc)
 {
 	int	i;
 
@@ -25,26 +26,31 @@ int	is_sorted(long int *a, int argc)
 	return (1);
 }
 
-void	translate(long int *a[], int argc)
+void	simplify(int *a[], int argc)
 {
-	long int	min;
-	int			i;
+	int	*a_copy;
+	int	i;
+	int	j;
+	int	k;
 
-	min = (*a)[0];
-	i = 1;
-	while (i < argc)
+	a_copy = malloc((argc - 1) * sizeof(int));
+	i = -1;
+	while ((i < argc - 2) && (i++ || 1))
+		a_copy[i] = (*a)[i];
+	i = 0;
+	while (i < argc - 1)
 	{
-		if (min > (*a)[i])
-			min = (*a)[i];
+		k = 0;
+		j = 1;
+		while (j < argc - 1)
+		{
+			if (a_copy[k] > a_copy[j])
+				k = j;
+			j++;
+		}
+		(*a)[k] = i;
+		a_copy[k] = 2147483647;
 		i++;
 	}
-	if (min < 0)
-	{
-		i = 0;
-		while (i < argc - 1)
-		{
-			(*a)[i] -= min;
-			i++;
-		}
-	}
+	free(a_copy);
 }
