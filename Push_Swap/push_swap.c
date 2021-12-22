@@ -50,7 +50,75 @@ int	isnt_end(int **stack, int j, int argc)
 	return (0);
 }
 
-void	sort(int ***a_stack, int ***b_stack, int argc)
+int	check_rest_pb(int **a_stack, int argc, int i, int j)
+{
+	int	count;
+
+	count = 0;
+	while ((j + count) < argc - 1)
+	{
+		if ((a_stack[count][i] == 0) || (a_stack[count][i] == -1))
+			count++;
+		else
+			return (0);
+	}
+	return (1);
+}
+
+void	small_sort(int *a, int argc)
+{
+	int	*tmp;
+	int	k;
+
+	if (argc == 4)
+	{
+		if (a[0] == 0)
+			printf("sa\nra\n");
+		else if (a[0] == 1 && a[1] == 0)
+			printf("sa");
+		else if (a[0] == 1 && a[1] == 2)
+			printf("rra\n");
+		else if (a[0] == 2 && a[1] == 0)
+			printf("ra\n");
+		else
+			printf("sa\nrra\n");
+	}
+	else if (argc == 6)
+	{
+		printf("pb\npb\n");
+		tmp = malloc(3 * sizeof(int));
+		tmp[0] = a[2];
+		tmp[1] = a[3];
+		tmp[2] = a[4];
+		simplify(&tmp, 4);
+		small_sort(tmp, 4);
+		free(tmp);
+		if (a[0] > a[1])
+			printf("sb\n");
+		k = 0;
+		while (k < a[1] - 1)
+		{
+			printf("ra\n");
+			k++;
+		}
+		printf("pa\n");
+		k = 0;
+		while (k < a[1] - a[0] - 1)
+		{
+			printf("rra\n");
+			k++;
+		}
+		printf("pa\n");
+		k = 0;
+		while (k < a[0])
+		{
+			printf("rra\n");
+			k++;
+		}
+	}
+}
+
+void	big_sort(int ***a_stack, int ***b_stack, int argc)
 {
 	int	i;
 	int	j;
@@ -65,6 +133,8 @@ void	sort(int ***a_stack, int ***b_stack, int argc)
 		{
 			if (((*a_stack)[0][i] == 0) || ((*a_stack)[0][i] == -1))
 			{
+				if (check_rest_pb((*a_stack), argc, i, j))
+					break ;
 				pab(b_stack, a_stack, argc);
 				printf("pb\n");
 				count++;
@@ -99,11 +169,16 @@ int	main(int argc, char *argv[])
 	if (is_sorted(a, argc))
 		return (1);
 	simplify(&a, argc);
+	if (argc < 7)
+	{
+		small_sort(a, argc);
+		return (1);
+	}
 	a_stack = itob(a, argc);
 	free(a);
 	b_stack = stack_to_void(argc);
 	if ((!a_stack) || (!b_stack))
 		return (0);
-	sort(&a_stack, &b_stack, argc);
+	big_sort(&a_stack, &b_stack, argc);
 	return (1);
 }
