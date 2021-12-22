@@ -16,7 +16,9 @@
 
 long	ft_atoi(const char *nptr);
 size_t	ft_strlen(const char *s);
-int		*read_check_stack(int argc, char *argv[]);
+int		*read_stack2(int argc, char *argv[]);
+int		*read_stack1(int *argc, char *argv[]);
+int		*read_check_stack(int *argc, char *argv[]);
 int		is_sorted(int *a, int argc);
 void	simplify(int *a[], int argc);
 int		**itob(int *a, int argc);

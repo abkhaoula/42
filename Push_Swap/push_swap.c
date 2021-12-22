@@ -43,7 +43,7 @@ int	main(int argc, char *argv[])
 	int	**a_stack;
 	int	**b_stack;
 
-	a = read_check_stack(argc, argv);
+	a = read_check_stack(&argc, argv);
 	if (!a)
 		return (0);
 	if (is_sorted(a, argc))

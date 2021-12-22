@@ -3,7 +3,8 @@ CC			=gcc
 CFLAGS		=-Wall -Wextra -Werror
 RM			=rm -f
 SRC			= push_swap.c push_swap_utils.c ft_atoi.c ft_strlen.c \
-		parse_stack.c to_binary.c push_swap_opps.c sort.c sort_utils.c
+		parse_stack.c to_binary.c push_swap_opps.c sort.c sort_utils.c \
+		parse_utils.c
 
 $(NAME):	$(SRC)
 				$(CC) -I. $? $(CFLAGS) -o $@
