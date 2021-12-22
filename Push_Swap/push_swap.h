@@ -24,5 +24,12 @@ void	sab(int ***stack, int argc);
 void	pab(int ***stack1, int ***stack2, int argc);
 void	rab(int ***stack, int argc, int end);
 void	rrab(int ***stack, int argc);
+void	small_sort(int *a, int argc);
+void	big_sort(int ***a_stack, int ***b_stack, int argc);
+int		isnt_end(int **stack, int j, int argc);
+int		check_rest_pb(int **a_stack, int argc, int i, int j);
+void	pb_in_sort(int ***a_stack, int ***b_stack, int argc, int *count);
+void	ra_in_sort(int ***a_stack, int argc, int count);
+void	pa_in_sort(int ***a_stack, int ***b_stack, int argc, int count);
 
 #endif

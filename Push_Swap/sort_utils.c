@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   sort_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kabdenou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,52 +13,57 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int	**stack_to_void(int argc)
+int	isnt_end(int **stack, int j, int argc)
 {
-	int	**stack;
 	int	i;
-	int	j;
 
-	stack = malloc((argc - 1) * sizeof(int *));
 	i = 0;
-	while ((stack) && (i < argc - 1))
+	while (i < argc - 1)
 	{
-		stack[i] = malloc(32 * sizeof(int));
-		if (!(stack[i]))
-			return (NULL);
-		j = 0;
-		while (j < 32)
-		{
-			stack[i][j] = -1;
-			j++;
-		}
+		if (stack[i][j] != -1)
+			return (1);
 		i++;
 	}
-	return (stack);
+	return (0);
 }
 
-int	main(int argc, char *argv[])
+int	check_rest_pb(int **a_stack, int argc, int i, int j)
 {
-	int	*a;
-	int	**a_stack;
-	int	**b_stack;
+	int	count;
 
-	a = read_check_stack(argc, argv);
-	if (!a)
-		return (0);
-	if (is_sorted(a, argc))
-		return (1);
-	simplify(&a, argc);
-	if (argc < 7)
+	count = 0;
+	while ((j + count) < argc - 1)
 	{
-		small_sort(a, argc);
-		return (1);
+		if ((a_stack[count][i] == 0) || (a_stack[count][i] == -1))
+			count++;
+		else
+			return (0);
 	}
-	a_stack = itob(a, argc);
-	free(a);
-	b_stack = stack_to_void(argc);
-	if ((!a_stack) || (!b_stack))
-		return (0);
-	big_sort(&a_stack, &b_stack, argc);
 	return (1);
+}
+
+void	pb_in_sort(int ***a_stack, int ***b_stack, int argc, int *count)
+{
+	pab(b_stack, a_stack, argc);
+	write(1, "pb\n", 3);
+	(*count)++;
+}
+
+void	ra_in_sort(int ***a_stack, int argc, int count)
+{
+	rab(a_stack, argc, argc - 2 - count);
+	write(1, "ra\n", 3);
+}
+
+void	pa_in_sort(int ***a_stack, int ***b_stack, int argc, int count)
+{
+	int	j;
+
+	j = 0;
+	while (j < count)
+	{
+		pab(a_stack, b_stack, argc);
+		write(1, "pa\n", 3);
+		j++;
+	}
 }
