@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 #include "push_swap.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 static int	in_int_range(char *argv[], int i)
 {
@@ -38,7 +39,7 @@ static int	*read_stack(int argc, char *argv[])
 			if ((!in_int_range(argv, i)) || (((j != 0) || argv[i + 1][j] != '-')
 				&& ((argv[i + 1][j] < '0') || (argv[i + 1][j] > '9'))))
 			{
-				printf("Error\n");
+				write(1, "Error\n", 6);
 				free(stack);
 				return (NULL);
 			}
@@ -58,7 +59,7 @@ int	*read_check_stack(int argc, char *argv[])
 
 	if (argc <= 1)
 	{
-		printf("Error\n");
+		write(1, "Error\n", 6);
 		return (NULL);
 	}
 	stack = read_stack(argc, argv);
@@ -70,7 +71,7 @@ int	*read_check_stack(int argc, char *argv[])
 		{
 			if (stack[i] == stack[j])
 			{
-				printf("Error\n");
+				write(1, "Error\n", 6);
 				free(stack);
 				return (NULL);
 			}

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 #include "push_swap.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 int	**stack_to_void(int argc)
 {
@@ -73,19 +74,19 @@ void	small_sort(int *a, int argc)
 	if (argc == 4)
 	{
 		if (a[0] == 0)
-			printf("sa\nra\n");
+			write(1, "sa\nra\n", 6);
 		else if (a[0] == 1 && a[1] == 0)
-			printf("sa");
+			write(1, "sa\n", 3);
 		else if (a[0] == 1 && a[1] == 2)
-			printf("rra\n");
+			write(1, "rra\n", 4);
 		else if (a[0] == 2 && a[1] == 0)
-			printf("ra\n");
+			write(1, "ra\n", 3);
 		else
-			printf("sa\nrra\n");
+			write(1, "sa\nrra\n", 7);
 	}
 	else if (argc == 6)
 	{
-		printf("pb\npb\n");
+		write(1, "pb\npb\n", 6);
 		tmp = malloc(3 * sizeof(int));
 		tmp[0] = a[2];
 		tmp[1] = a[3];
@@ -94,25 +95,25 @@ void	small_sort(int *a, int argc)
 		small_sort(tmp, 4);
 		free(tmp);
 		if (a[0] > a[1])
-			printf("sb\n");
+			write(1, "sb\n", 3);
 		k = 0;
 		while (k < a[1] - 1)
 		{
-			printf("ra\n");
+			write(1, "ra\n", 3);
 			k++;
 		}
-		printf("pa\n");
+		write(1, "pa\n", 3);
 		k = 0;
 		while (k < a[1] - a[0] - 1)
 		{
-			printf("rra\n");
+			write(1, "rra\n", 4);
 			k++;
 		}
-		printf("pa\n");
+		write(1, "pa\n", 3);
 		k = 0;
 		while (k < a[0])
 		{
-			printf("rra\n");
+			write(1, "rra\n", 4);
 			k++;
 		}
 	}
@@ -136,13 +137,13 @@ void	big_sort(int ***a_stack, int ***b_stack, int argc)
 				if (check_rest_pb((*a_stack), argc, i, j))
 					break ;
 				pab(b_stack, a_stack, argc);
-				printf("pb\n");
+				write(1, "pb\n", 3);
 				count++;
 			}
 			else
 			{
 				rab(a_stack, argc, argc - 2 - count);
-				printf("ra\n");
+				write(1, "ra\n", 3);
 			}
 			j++;
 		}
@@ -150,7 +151,7 @@ void	big_sort(int ***a_stack, int ***b_stack, int argc)
 		while (j < count)
 		{
 			pab(a_stack, b_stack, argc);
-			printf("pa\n");
+			write(1, "pa\n", 3);
 			j++;
 		}
 		i++;
