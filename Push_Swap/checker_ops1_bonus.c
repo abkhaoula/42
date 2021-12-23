@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap_utils.c                                  :+:      :+:    :+:   */
+/*   checker_ops1_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kabdenou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,49 +9,44 @@
 /*   Updated: 2021/12/12 16:28:00 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "push_swap.h"
 #include "checker_bonus.h"
 #include <stdlib.h>
+#include <unistd.h>
 
-int	is_sorted(int *a, int argc)
+void	sab(int **ab, int ab_count)
 {
-	int	i;
+	int	tmp;
 
-	i = 0;
-	while (i < argc - 2)
-	{
-		if (a[i] > a[i + 1])
-			return (0);
-		i++;
-	}
-	return (1);
+	if (ab_count < 2)
+		return ;
+	tmp = (*ab)[0];
+	(*ab)[0] = (*ab)[1];
+	(*ab)[1] = tmp;
 }
 
-void	simplify(int *a[], int argc)
+void	ss(int **a, int a_count, int **b, int b_count)
 {
-	int	*a_copy;
-	int	i;
-	int	j;
-	int	k;
+	sab(a, a_count);
+	sab(b, b_count);
+}
 
-	a_copy = malloc((argc - 1) * sizeof(int));
-	i = -1;
-	while ((i < argc - 2) && (i++ || 1))
-		a_copy[i] = (*a)[i];
+void	rab(int **ab, int ab_count)
+{
+	int	tmp;
+	int	i;
+
+	tmp = (*ab)[0];
 	i = 0;
-	while (i < argc - 1)
+	while (i < ab_count - 1)
 	{
-		k = 0;
-		j = 1;
-		while (j < argc - 1)
-		{
-			if (a_copy[k] > a_copy[j])
-				k = j;
-			j++;
-		}
-		(*a)[k] = i;
-		a_copy[k] = 2147483647;
+		(*ab)[i] = (*ab)[i + 1];
 		i++;
 	}
-	free(a_copy);
+	(*ab)[ab_count - 1] = tmp;
+}
+
+void	rr(int **a, int a_count, int **b, int b_count)
+{
+	rab(a, a_count);
+	rab(b, b_count);
 }

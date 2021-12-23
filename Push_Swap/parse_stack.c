@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "push_swap.h"
+#include "checker_bonus.h"
 #include <stdlib.h>
 #include <unistd.h>
 

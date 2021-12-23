@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap_utils.c                                  :+:      :+:    :+:   */
+/*   checker_ops2_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kabdenou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,49 +9,50 @@
 /*   Updated: 2021/12/12 16:28:00 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "push_swap.h"
 #include "checker_bonus.h"
 #include <stdlib.h>
+#include <unistd.h>
 
-int	is_sorted(int *a, int argc)
+void	pab(int **a, int *a_count, int **b, int *b_count)
 {
 	int	i;
 
-	i = 0;
-	while (i < argc - 2)
+	if ((*b_count) == 0)
+		return ;
+	i = (*a_count) - 1;
+	while (i >= 0)
 	{
-		if (a[i] > a[i + 1])
-			return (0);
+		(*a)[i + 1] = (*a)[i];
+		i--;
+	}
+	(*a)[0] = (*b)[0];
+	(*a_count)++;
+	i = 0;
+	(*b_count)--;
+	while (i < (*b_count))
+	{
+		(*b)[i] = (*b)[i + 1];
 		i++;
 	}
-	return (1);
 }
 
-void	simplify(int *a[], int argc)
+void	rrab(int **ab, int ab_count)
 {
-	int	*a_copy;
+	int	tmp;
 	int	i;
-	int	j;
-	int	k;
 
-	a_copy = malloc((argc - 1) * sizeof(int));
-	i = -1;
-	while ((i < argc - 2) && (i++ || 1))
-		a_copy[i] = (*a)[i];
-	i = 0;
-	while (i < argc - 1)
+	tmp = (*ab)[ab_count - 1];
+	i = ab_count - 1;
+	while (i > 0)
 	{
-		k = 0;
-		j = 1;
-		while (j < argc - 1)
-		{
-			if (a_copy[k] > a_copy[j])
-				k = j;
-			j++;
-		}
-		(*a)[k] = i;
-		a_copy[k] = 2147483647;
-		i++;
+		(*ab)[i] = (*ab)[i - 1];
+		i--;
 	}
-	free(a_copy);
+	(*ab)[0] = tmp;
+}
+
+void	rrr(int **a, int a_count, int **b, int b_count)
+{
+	rrab(a, a_count);
+	rrab(b, b_count);
 }

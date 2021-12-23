@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap_utils.c                                  :+:      :+:    :+:   */
+/*   checker_bonus.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kabdenou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,49 +9,19 @@
 /*   Updated: 2021/12/12 16:28:00 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "push_swap.h"
-#include "checker_bonus.h"
-#include <stdlib.h>
+#ifndef CHECKER_BONUS_H
+# define CHECKER_BONUS_H
 
-int	is_sorted(int *a, int argc)
-{
-	int	i;
+# include <stdio.h>
 
-	i = 0;
-	while (i < argc - 2)
-	{
-		if (a[i] > a[i + 1])
-			return (0);
-		i++;
-	}
-	return (1);
-}
+int		*read_check_stack(int *argc, char *argv[]);
+int		is_sorted(int *a, int argc);
+void	sab(int **ab, int ab_count);
+void	ss(int **a, int a_count, int **b, int b_count);
+void	pab(int **a, int *a_count, int **b, int *b_count);
+void	rab(int **ab, int ab_count);
+void	rr(int **a, int a_count, int **b, int b_count);
+void	rrab(int **ab, int ab_count);
+void	rrr(int **a, int a_count, int **b, int b_count);
 
-void	simplify(int *a[], int argc)
-{
-	int	*a_copy;
-	int	i;
-	int	j;
-	int	k;
-
-	a_copy = malloc((argc - 1) * sizeof(int));
-	i = -1;
-	while ((i < argc - 2) && (i++ || 1))
-		a_copy[i] = (*a)[i];
-	i = 0;
-	while (i < argc - 1)
-	{
-		k = 0;
-		j = 1;
-		while (j < argc - 1)
-		{
-			if (a_copy[k] > a_copy[j])
-				k = j;
-			j++;
-		}
-		(*a)[k] = i;
-		a_copy[k] = 2147483647;
-		i++;
-	}
-	free(a_copy);
-}
+#endif
