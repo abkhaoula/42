@@ -53,27 +53,27 @@ int	main(int argc, char *argv[])
 	while (r > 0)
 	{
 		if (is_same(instruction, "sa\n"))
-			sab(&a, a_count);
+			_sab(&a, a_count);
 		else if (is_same(instruction, "sb\n"))
-			sab(&b, b_count);
+			_sab(&b, b_count);
 		else if (is_same(instruction, "ss\n"))
-			ss(&a, a_count, &b, b_count);
+			_ss(&a, a_count, &b, b_count);
 		else if (is_same(instruction, "pa\n"))
-			pab(&a, &a_count, &b, &b_count);
+			_pab(&a, &a_count, &b, &b_count);
 		else if (is_same(instruction, "pb\n"))
-			pab(&b, &b_count, &a, &a_count);
+			_pab(&b, &b_count, &a, &a_count);
 		else if (is_same(instruction, "ra\n"))
-			rab(&a, a_count);
+			_rab(&a, a_count);
 		else if (is_same(instruction, "rb\n"))
-			rab(&b, b_count);
+			_rab(&b, b_count);
 		else if (is_same(instruction, "rr\n"))
-			rr(&a, a_count, &b, b_count);
+			_rr(&a, a_count, &b, b_count);
 		else if (is_same(instruction, "rra\n"))
-			rrab(&a, a_count);
+			_rrab(&a, a_count);
 		else if (is_same(instruction, "rrb\n"))
-			rrab(&b, b_count);
+			_rrab(&b, b_count);
 		else if (is_same(instruction, "rrr\n"))
-			rrr(&a, a_count, &b, b_count);
+			_rrr(&a, a_count, &b, b_count);
 		else
 			write(1, "Error\n", 6);
 		i = 0;
@@ -87,7 +87,7 @@ int	main(int argc, char *argv[])
 			else if (r == 0)
 			{
 				write(1, "Error\n", 6);
-				return ;
+				return (0);
 			}
 			i++;
 		}

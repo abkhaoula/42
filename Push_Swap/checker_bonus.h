@@ -16,12 +16,12 @@
 
 int		*read_check_stack(int *argc, char *argv[]);
 int		is_sorted(int *a, int argc);
-void	sab(int **ab, int ab_count);
-void	ss(int **a, int a_count, int **b, int b_count);
-void	pab(int **a, int *a_count, int **b, int *b_count);
-void	rab(int **ab, int ab_count);
-void	rr(int **a, int a_count, int **b, int b_count);
-void	rrab(int **ab, int ab_count);
-void	rrr(int **a, int a_count, int **b, int b_count);
+void	_sab(int **ab, int ab_count);
+void	_ss(int **a, int a_count, int **b, int b_count);
+void	_pab(int **a, int *a_count, int **b, int *b_count);
+void	_rab(int **ab, int ab_count);
+void	_rr(int **a, int a_count, int **b, int b_count);
+void	_rrab(int **ab, int ab_count);
+void	_rrr(int **a, int a_count, int **b, int b_count);
 
 #endif

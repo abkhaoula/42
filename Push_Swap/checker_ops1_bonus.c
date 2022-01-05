@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void	sab(int **ab, int ab_count)
+void	_sab(int **ab, int ab_count)
 {
 	int	tmp;
 
@@ -24,13 +24,13 @@ void	sab(int **ab, int ab_count)
 	(*ab)[1] = tmp;
 }
 
-void	ss(int **a, int a_count, int **b, int b_count)
+void	_ss(int **a, int a_count, int **b, int b_count)
 {
-	sab(a, a_count);
-	sab(b, b_count);
+	_sab(a, a_count);
+	_sab(b, b_count);
 }
 
-void	rab(int **ab, int ab_count)
+void	_rab(int **ab, int ab_count)
 {
 	int	tmp;
 	int	i;
@@ -45,8 +45,8 @@ void	rab(int **ab, int ab_count)
 	(*ab)[ab_count - 1] = tmp;
 }
 
-void	rr(int **a, int a_count, int **b, int b_count)
+void	_rr(int **a, int a_count, int **b, int b_count)
 {
-	rab(a, a_count);
-	rab(b, b_count);
+	_rab(a, a_count);
+	_rab(b, b_count);
 }
