@@ -30,6 +30,13 @@ int	handle_input(int keysym, t_mlx_win *mw)
 	return (0);
 }
 
+int	close_button(t_mlx_win *mw)
+{
+	mlx_destroy_window(mw->mlx_ptr, mw->win_ptr);
+	mlx_loop_end(mw->mlx_ptr);
+	return (0);
+}
+
 int	main(void)
 {
 	t_mlx_win	mw;
@@ -44,6 +51,7 @@ int	main(void)
 		return (0);
 	}
 	mlx_key_hook(mw.win_ptr, &handle_input, &mw);
+	mlx_hook(mw.win_ptr, 17, 0, close_button, &mw);
 	mlx_loop (mw.mlx_ptr);
 	mlx_destroy_display(mw.mlx_ptr);
 	free(mw.mlx_ptr);
