@@ -9,16 +9,12 @@
 /*   Updated: 2022/01/07 16:28:00 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "so_long.h"
 #include "mlx.h"
 #include <X11/keysym.h>
 #include <stdlib.h>
-#include <stdio.h>
-
-typedef struct s_mlx_win
-{
-	void	*mlx_ptr;
-	void	*win_ptr;
-}	t_mlx_win;
+#include <unistd.h>
+#include <fcntl.h>
 
 int	handle_input(int keysym, t_mlx_win *mw)
 {
@@ -37,6 +33,41 @@ int	close_button(t_mlx_win *mw)
 	return (0);
 }
 
+int	render_rect(t_mlx_win *mw, t_rect rect)
+{
+	int	i;
+	int	j;
+
+	i = rect.y;
+	while (i < rect.y + rect.height)
+	{
+		j = rect.x;
+		while (j < rect.x + rect.width)
+			mlx_pixel_put(mw->mlx_ptr, mw->win_ptr, j++, i, rect.color);
+		++i;
+	}
+	return (0);
+}
+
+int	render_map(t_mlx_win *data)
+{
+	int	win_width;
+	int	win_height;
+	int	fd;
+	int	*hw;
+
+	win_width = 600;
+	win_height = 300;
+	fd = open("maps/simple.ber", O_RDONLY);
+	hw = map_dim(fd);
+	if (hw)
+		printf("YESS h = %i  w = %i\n", hw[0], hw[1]);
+	render_rect(data, (t_rect){win_width - 100, win_height - 100,
+		100, 100, 0xFF00});
+	render_rect(data, (t_rect){0, 0, 100, 100, 0xFF0000});
+	return (0);
+}
+
 int	main(void)
 {
 	t_mlx_win	mw;
@@ -50,6 +81,7 @@ int	main(void)
 		free(mw.win_ptr);
 		return (0);
 	}
+	render_map(&mw);
 	mlx_key_hook(mw.win_ptr, &handle_input, &mw);
 	mlx_hook(mw.win_ptr, 17, 0, close_button, &mw);
 	mlx_loop (mw.mlx_ptr);
