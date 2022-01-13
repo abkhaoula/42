@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_parser.c                                       :+:      :+:    :+:   */
+/*   map_to_tab.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kabdenou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,41 +9,34 @@
 /*   Updated: 2022/01/07 16:28:00 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef SO_LONG_H
-# define SO_LONG_H
+#include "so_long.h"
+#include "mlx.h"
+#include <X11/keysym.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
 
-# include <stdio.h>
-
-typedef struct s_mlx_win
+char	**map_to_tab(int fd, int *hw)
 {
-	void	*mlx_ptr;
-	void	*win_ptr;
-	int		*hw;
+	int		i;
+	int		j;
+	char	c;
 	char	**map;
-	int		*pos;
-	int		coin;
-}	t_mlx_win;
 
-typedef struct s_rect
-{
-	int		x;
-	int		y;
-	int		width;
-	int		height;
-	int		color;
-}	t_rect;
-
-int		*initial(int fd, int *r, char *c, int *i);
-int		*check_end_r(int i, int *hw);
-int		re_intitial(int *i, int *r, int fd, char *c);
-int		check_size_i(int *i, int *hw);
-int		*map_dim(int fd);
-int		render_errors(int p, int e, int c);
-void	update_pce(char c, int **pce);
-int		parse_map(int fd, int *hw);
-int		render_rect(t_mlx_win *mw, t_rect rect);
-int		render_map(t_mlx_win *mw);
-char	**map_to_tab(int fd, int *hw);
-int		handle_input_button(int keysym, t_mlx_win *mw);
-
-#endif
+	map = malloc(hw[1] * sizeof(char *));
+	i = 0;
+	while (i < hw[1])
+	{
+		map[i] = malloc(hw[0] * sizeof(char));
+		j = 0;
+		while (j < hw[0])
+		{
+			read(fd, &c, 1);
+			map[i][j] = c;
+			j++;
+		}
+		read(fd, &c, 1);
+		i++;
+	}
+	return (map);
+}

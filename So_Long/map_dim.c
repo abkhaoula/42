@@ -50,5 +50,10 @@ int	*map_dim(int fd)
 	int		*hw;
 
 	hw = compute_map_dim(fd, &hw);
+	if (!hw)
+	{
+		printf("\033[0;31m YOUR MAP IS NOT RECTANGULAR !!! \n\e[0m");
+		return (NULL);
+	}
 	return (hw);
 }
