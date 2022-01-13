@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_dim_utils.c                                    :+:      :+:    :+:   */
+/*   parse_map_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kabdenou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -16,46 +16,32 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-int	*initial(int fd, int *r, char *c, int *i)
+int	render_errors(int p, int e, int c)
 {
-	int	*hw;
-
-	hw = malloc(2 * sizeof(int));
-	hw[0] = 0;
-	*r = read(fd, c, 1);
-	while ((*r) & ((*c) != '\n'))
+	if (p != 1)
 	{
-		hw[0]++;
-		*r = read(fd, c, 1);
+		printf("\033[0;31m YOU SHOULD HAVE ONE PLAYER !!! \n\e[0m");
+		return (0);
 	}
-	hw[1] = 1;
-	*r = read(fd, c, 1);
-	*i = 0;
-	return (hw);
-}
-
-int	*check_end_r(int i, int *hw)
-{
-	if (i != hw[0])
-		return (NULL);
-	else
+	if (e == 0)
 	{
-		hw[1]++;
-		return (hw);
+		printf("\033[0;31m YOU SHOULD HAVE AT LEAST ONE EXIT !!! \n\e[0m");
+		return (0);
 	}
-}
-
-int	re_intitial(int *i, int *r, int fd, char *c)
-{
-	*i = 0;
-	*r = read(fd, c, 1);
+	if (c == 0)
+	{
+		printf("\033[0;31m YOU SHOULD HAVE AT LEAST ONE COIN !!! \n\e[0m");
+		return (0);
+	}
 	return (1);
 }
 
-int	check_size_i(int *i, int *hw)
+void	update_pce(char c, int **pce)
 {
-	(*i)++;
-	if ((*i) > hw[0])
-		return (1);
-	return (0);
+	if (c == 'P')
+		(*pce)[0]++;
+	else if (c == 'C')
+		(*pce)[1]++;
+	else if (c == 'E')
+		(*pce)[2]++;
 }

@@ -30,7 +30,7 @@ static int	*compute_map_dim(int fd, int **hw)
 			if ((c == '\n') && (i != (*hw)[0]))
 				return (NULL);
 			else if (c == '\n')
-				re_intitial(&i, &r, fd, &c);
+				(*hw)[1] = (*hw)[1] + re_intitial(&i, &r, fd, &c);
 			else if (!r)
 				return (check_end_r(i, (*hw)));
 			else

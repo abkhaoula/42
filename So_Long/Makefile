@@ -2,7 +2,7 @@ NAME		=so_long
 CC			=gcc
 CFLAGS		=-Wall -Wextra -Werror
 RM			=rm -f
-SRC			= so_long.c map_dim.c map_dim_utils.c
+SRC			= so_long.c map_dim.c map_dim_utils.c parse_map.c parse_map_utils.c
 
 $(NAME):	$(SRC)
 				$(CC) $(SRC) $(CFLAGS) -Lmlx -lmlx -lXext -lX11 -I minilibx-linux -L minilibx-linux -o $(NAME)

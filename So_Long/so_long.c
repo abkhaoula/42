@@ -49,22 +49,27 @@ int	render_rect(t_mlx_win *mw, t_rect rect)
 	return (0);
 }
 
-int	render_map(t_mlx_win *data)
+int	render_map(t_mlx_win *mw)
 {
-	int	win_width;
-	int	win_height;
 	int	fd;
 	int	*hw;
 
-	win_width = 600;
-	win_height = 300;
 	fd = open("maps/simple.ber", O_RDONLY);
 	hw = map_dim(fd);
-	if (hw)
-		printf("YESS h = %i  w = %i\n", hw[0], hw[1]);
-	render_rect(data, (t_rect){win_width - 100, win_height - 100,
-		100, 100, 0xFF00});
-	render_rect(data, (t_rect){0, 0, 100, 100, 0xFF0000});
+	if (!hw)
+	{
+		printf("\033[0;31m YOUR MAP IS NOT RECTANGULAR !!! \n\e[0m");
+		mlx_destroy_window(mw->mlx_ptr, mw->win_ptr);
+		mlx_loop_end(mw->mlx_ptr);
+		return (0);
+	}
+	close(fd);
+	fd = open("maps/simple.ber", O_RDONLY);
+	if (parse_map(fd, hw))
+	{
+		printf("YESS\n");
+	}
+	render_rect(mw, (t_rect){0, 0, 100, 100, 0xFF0000});
 	return (0);
 }
 

@@ -31,8 +31,11 @@ typedef struct s_rect
 
 int		*initial(int fd, int *r, char *c, int *i);
 int		*check_end_r(int i, int *hw);
-void	re_intitial(int *i, int *r, int fd, char *c);
+int		re_intitial(int *i, int *r, int fd, char *c);
 int		check_size_i(int *i, int *hw);
 int		*map_dim(int fd);
+int		render_errors(int p, int e, int c);
+void	update_pce(char c, int **pce);
+int		parse_map(int fd, int *hw);
 
 #endif
