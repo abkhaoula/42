@@ -38,8 +38,6 @@ int	color_elem(char c, int **pos, int x, int y)
 
 	if (c == '1')
 		color = 0xF9EAE1;
-	else if (c == '0')
-		color = 0x000000;
 	else if (c == 'E')
 		color = 0xAA998F;
 	else if (c == 'P')
@@ -52,6 +50,31 @@ int	color_elem(char c, int **pos, int x, int y)
 	else if (c == 'C')
 		color = 0xD98324;
 	return (color);
+}
+
+void	render_elem(t_mlx_win *mw, int *xy, char c, int **pos)
+{
+	void	*img;
+
+	if (c == 'P')
+	{
+		(*pos) = malloc(2 * sizeof(int));
+		(*pos)[0] = xy[1] / 50;
+		(*pos)[1] = xy[0] / 50;
+		img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/P.xpm",
+				&(int){50}, &(int){50});
+	}
+	else if (c == '1')
+		img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/1.xpm",
+				&(int){50}, &(int){50});
+	else if (c == 'C')
+		img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/C.xpm",
+				&(int){50}, &(int){50});
+	else if (c == 'E')
+		img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/E.xpm",
+				&(int){50}, &(int){50});
+	if (c != '0')
+		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img, xy[0], xy[1]);
 }
 
 int	*render_map_rects(t_mlx_win *mw, int fd)
@@ -70,7 +93,7 @@ int	*render_map_rects(t_mlx_win *mw, int fd)
 	{
 		if ((c == '1') || (c == '0') || (c == 'E') || (c == 'P') || (c == 'C'))
 		{
-			render_rect(mw, (t_rect){x, y, 50, 50, color_elem(c, &pos, x, y)});
+			render_elem(mw, (int []){x, y}, c, &pos);
 			x = x + 50;
 		}
 		else if (c == '\n')
