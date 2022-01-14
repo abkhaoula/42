@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-void	handle_xk_up(t_mlx_win *mw, void *img)
+void	handle_xk_up(t_mlx_win *mw, void *img, int *count)
 {
 	if (((mw->map[mw->pos[0] - 1][mw->pos[1]] != '1')
 		&& (mw->map[mw->pos[0] - 1][mw->pos[1]] != 'E'))
@@ -37,10 +37,12 @@ void	handle_xk_up(t_mlx_win *mw, void *img)
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
 		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
+		(*count)++;
+		render_count(mw, *count);
 	}
 }
 
-void	handle_xk_right(t_mlx_win *mw, void *img)
+void	handle_xk_right(t_mlx_win *mw, void *img, int *count)
 {
 	if (((mw->map[mw->pos[0]][mw->pos[1] + 1] != '1')
 		&& (mw->map[mw->pos[0]][mw->pos[1] + 1] != 'E'))
@@ -61,10 +63,12 @@ void	handle_xk_right(t_mlx_win *mw, void *img)
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
 		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
+		(*count)++;
+		render_count(mw, *count);
 	}
 }
 
-void	handle_xk_down(t_mlx_win *mw, void *img)
+void	handle_xk_down(t_mlx_win *mw, void *img, int *count)
 {
 	if (((mw->map[mw->pos[0] + 1][mw->pos[1]] != '1')
 		&& (mw->map[mw->pos[0] + 1][mw->pos[1]] != 'E'))
@@ -85,10 +89,12 @@ void	handle_xk_down(t_mlx_win *mw, void *img)
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
 		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
+		(*count)++;
+		render_count(mw, *count);
 	}
 }
 
-void	handle_xk_left(t_mlx_win *mw, void *img)
+void	handle_xk_left(t_mlx_win *mw, void *img, int *count)
 {
 	if (((mw->map[mw->pos[0]][mw->pos[1] - 1] != '1')
 		&& (mw->map[mw->pos[0]][mw->pos[1] - 1] != 'E'))
@@ -109,12 +115,15 @@ void	handle_xk_left(t_mlx_win *mw, void *img)
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
 		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
+		(*count)++;
+		render_count(mw, *count);
 	}
 }
 
 int	handle_input_button(int keysym, t_mlx_win *mw)
 {
-	void	*img;
+	void		*img;
+	static int	count;
 
 	img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/P.xpm",
 			&(int){50}, &(int){50});
@@ -124,13 +133,13 @@ int	handle_input_button(int keysym, t_mlx_win *mw)
 		mlx_loop_end(mw->mlx_ptr);
 		return (0);
 	}
-	else if (keysym == XK_Up)
-		handle_xk_up(mw, img);
-	else if (keysym == XK_Right)
-		handle_xk_right(mw, img);
-	else if (keysym == XK_Down)
-		handle_xk_down(mw, img);
-	else if (keysym == XK_Left)
-		handle_xk_left(mw, img);
+	else if ((keysym == XK_Up) || (keysym == XK_w))
+		handle_xk_up(mw, img, &count);
+	else if ((keysym == XK_Right) || (keysym == XK_d))
+		handle_xk_right(mw, img, &count);
+	else if ((keysym == XK_Down) || (keysym == XK_s))
+		handle_xk_down(mw, img, &count);
+	else if ((keysym == XK_Left) || (keysym == XK_a))
+		handle_xk_left(mw, img, &count);
 	return (0);
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long.c                                          :+:      :+:    :+:   */
+/*   handle_input_button_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kabdenou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -16,26 +16,12 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-int	close_button(t_mlx_win *mw)
+void	render_count(t_mlx_win *mw, int count)
 {
-	mlx_destroy_window(mw->mlx_ptr, mw->win_ptr);
-	mlx_loop_end(mw->mlx_ptr);
-	return (0);
-}
+	void	*img;
 
-int	main(void)
-{
-	t_mlx_win	mw;
-
-	mw.mlx_ptr = mlx_init();
-	if (mw.mlx_ptr == NULL)
-		return (0);
-	if (! render_map(&mw))
-		return (0);
-	mlx_string_put(mw.mlx_ptr, mw.win_ptr, 30, 20, 0x000000, "0");
-	mlx_key_hook(mw.win_ptr, &handle_input_button, &mw);
-	mlx_hook(mw.win_ptr, 17, 0, close_button, &mw);
-	mlx_loop (mw.mlx_ptr);
-	mlx_destroy_display(mw.mlx_ptr);
-	free(mw.mlx_ptr);
+	img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/1.xpm",
+			&(int){50}, &(int){50});
+	mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img, 0, 0);
+	mlx_string_put(mw->mlx_ptr, mw->win_ptr, 30, 20, 0x000000, ft_itoa(count));
 }
