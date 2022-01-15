@@ -49,7 +49,7 @@ int	parse_line(int fd, int *hw, int **pce)
 			printf("\033[0;31m YOUR EDGES ARE NOT WELL DONE !!! \n\e[0m");
 			return (0);
 		}
-		else if ((c == 'P') || (c == 'C') || (c == 'E'))
+		else if ((c == 'P') || (c == 'C') || (c == 'E') || (c == 'D'))
 			update_pce(c, pce);
 		else if (c != '0' && c != '1')
 		{

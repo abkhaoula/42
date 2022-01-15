@@ -18,6 +18,8 @@
 
 void	handle_xk_up(t_mlx_win *mw, void *img, int *count)
 {
+	if (exit_fail(mw, mw->pos[0] - 1, mw->pos[1]))
+		return ;
 	if (((mw->map[mw->pos[0] - 1][mw->pos[1]] != '1')
 		&& (mw->map[mw->pos[0] - 1][mw->pos[1]] != 'E'))
 		|| ((mw->map[mw->pos[0] - 1][mw->pos[1]] == 'E') && (!mw->coin)))
@@ -28,12 +30,8 @@ void	handle_xk_up(t_mlx_win *mw, void *img, int *count)
 			(mw->pos[0] * 50), 50, 50, 0x000000});
 		mw->map[mw->pos[0]][mw->pos[1]] = '0';
 		mw->pos[0]--;
-		if (mw->map[mw->pos[0]][mw->pos[1]] == 'E')
-		{
-			mlx_destroy_window(mw->mlx_ptr, mw->win_ptr);
-			mlx_loop_end(mw->mlx_ptr);
+		if (exit_success(mw))
 			return ;
-		}
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
 		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
@@ -44,6 +42,8 @@ void	handle_xk_up(t_mlx_win *mw, void *img, int *count)
 
 void	handle_xk_right(t_mlx_win *mw, void *img, int *count)
 {
+	if (exit_fail(mw, mw->pos[0], mw->pos[1] + 1))
+		return ;
 	if (((mw->map[mw->pos[0]][mw->pos[1] + 1] != '1')
 		&& (mw->map[mw->pos[0]][mw->pos[1] + 1] != 'E'))
 		|| ((mw->map[mw->pos[0]][mw->pos[1] + 1] == 'E') && (!mw->coin)))
@@ -54,12 +54,8 @@ void	handle_xk_right(t_mlx_win *mw, void *img, int *count)
 			(mw->pos[0] * 50), 50, 50, 0x000000});
 		mw->map[mw->pos[0]][mw->pos[1]] = '0';
 		mw->pos[1]++;
-		if (mw->map[mw->pos[0]][mw->pos[1]] == 'E')
-		{
-			mlx_destroy_window(mw->mlx_ptr, mw->win_ptr);
-			mlx_loop_end(mw->mlx_ptr);
+		if (exit_success(mw))
 			return ;
-		}
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
 		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
@@ -70,6 +66,8 @@ void	handle_xk_right(t_mlx_win *mw, void *img, int *count)
 
 void	handle_xk_down(t_mlx_win *mw, void *img, int *count)
 {
+	if (exit_fail(mw, mw->pos[0] + 1, mw->pos[1]))
+		return ;
 	if (((mw->map[mw->pos[0] + 1][mw->pos[1]] != '1')
 		&& (mw->map[mw->pos[0] + 1][mw->pos[1]] != 'E'))
 		|| ((mw->map[mw->pos[0] + 1][mw->pos[1]] == 'E') && (!mw->coin)))
@@ -80,12 +78,8 @@ void	handle_xk_down(t_mlx_win *mw, void *img, int *count)
 			(mw->pos[0] * 50), 50, 50, 0x000000});
 		mw->map[mw->pos[0]][mw->pos[1]] = '0';
 		mw->pos[0]++;
-		if (mw->map[mw->pos[0]][mw->pos[1]] == 'E')
-		{
-			mlx_destroy_window(mw->mlx_ptr, mw->win_ptr);
-			mlx_loop_end(mw->mlx_ptr);
+		if (exit_success(mw))
 			return ;
-		}
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
 		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
@@ -96,6 +90,8 @@ void	handle_xk_down(t_mlx_win *mw, void *img, int *count)
 
 void	handle_xk_left(t_mlx_win *mw, void *img, int *count)
 {
+	if (exit_fail(mw, mw->pos[0], mw->pos[1] - 1))
+		return ;
 	if (((mw->map[mw->pos[0]][mw->pos[1] - 1] != '1')
 		&& (mw->map[mw->pos[0]][mw->pos[1] - 1] != 'E'))
 		|| ((mw->map[mw->pos[0]][mw->pos[1] - 1] == 'E') && (!mw->coin)))
@@ -106,12 +102,8 @@ void	handle_xk_left(t_mlx_win *mw, void *img, int *count)
 			(mw->pos[0] * 50), 50, 50, 0x000000});
 		mw->map[mw->pos[0]][mw->pos[1]] = '0';
 		mw->pos[1]--;
-		if (mw->map[mw->pos[0]][mw->pos[1]] == 'E')
-		{
-			mlx_destroy_window(mw->mlx_ptr, mw->win_ptr);
-			mlx_loop_end(mw->mlx_ptr);
+		if (exit_success(mw))
 			return ;
-		}
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
 		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));

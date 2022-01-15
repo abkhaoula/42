@@ -73,6 +73,9 @@ void	render_elem(t_mlx_win *mw, int *xy, char c, int **pos)
 	else if (c == 'E')
 		img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/E.xpm",
 				&(int){50}, &(int){50});
+	else if (c == 'D')
+		img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/D.xpm",
+				&(int){50}, &(int){50});
 	if (c != '0')
 		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img, xy[0], xy[1]);
 }
@@ -88,10 +91,10 @@ int	*render_map_rects(t_mlx_win *mw, int fd)
 	x = 0;
 	y = 0;
 	r = read(fd, &c, 1);
-	pos = malloc(2 * sizeof(int));
 	while (r)
 	{
-		if ((c == '1') || (c == '0') || (c == 'E') || (c == 'P') || (c == 'C'))
+		if ((c == '1') || (c == '0') || (c == 'E') || (c == 'P')
+			|| (c == 'C') || (c == 'D'))
 		{
 			render_elem(mw, (int []){x, y}, c, &pos);
 			x = x + 50;

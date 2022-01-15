@@ -25,3 +25,29 @@ void	render_count(t_mlx_win *mw, int count)
 	mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img, 0, 0);
 	mlx_string_put(mw->mlx_ptr, mw->win_ptr, 30, 20, 0x000000, ft_itoa(count));
 }
+
+int	exit_fail(t_mlx_win *mw, int x, int y)
+
+{
+	if (mw->map[x][y] == 'D')
+	{
+		mlx_destroy_window(mw->mlx_ptr, mw->win_ptr);
+		mlx_loop_end(mw->mlx_ptr);
+		printf("\033[0;33m :: NOOOOOOOOOO :: \n\e[0m");
+		return (1);
+	}
+	return (0);
+}
+
+int	exit_success(t_mlx_win *mw)
+
+{
+	if (mw->map[mw->pos[0]][mw->pos[1]] == 'E')
+	{
+		mlx_destroy_window(mw->mlx_ptr, mw->win_ptr);
+		mlx_loop_end(mw->mlx_ptr);
+		printf("\033[0;33m :: YESSSSSSSSS :: \n\e[0m");
+		return (1);
+	}
+	return (0);
+}

@@ -45,6 +45,8 @@ int		render_rect(t_mlx_win *mw, t_rect rect);
 int		render_map(t_mlx_win *mw);
 char	**map_to_tab(int fd, int *hw);
 void	render_count(t_mlx_win *mw, int count);
+int		exit_fail(t_mlx_win *mw, int x, int y);
+int		exit_success(t_mlx_win *mw);
 int		handle_input_button(int keysym, t_mlx_win *mw);
 char	*ft_itoa(int n);
 
