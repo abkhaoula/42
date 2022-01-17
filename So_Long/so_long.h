@@ -14,6 +14,24 @@
 
 # include <stdio.h>
 
+typedef struct s_C
+{
+	int		*x;
+	int		*y;
+	int		count;
+	int		motion;
+	int		loop;
+}	t_C;
+
+typedef struct s_D
+{
+	int		*x;
+	int		*y;
+	int		count;
+	int		motion;
+	int		loop;
+}	t_D;
+
 typedef struct s_mlx_win
 {
 	void	*mlx_ptr;
@@ -21,7 +39,8 @@ typedef struct s_mlx_win
 	int		*hw;
 	char	**map;
 	int		*pos;
-	int		coin;
+	t_D		danger;
+	t_C		coins;
 }	t_mlx_win;
 
 typedef struct s_rect
@@ -43,11 +62,17 @@ void	update_pce(char c, int **pce);
 int		parse_map(int fd, int *hw);
 int		render_rect(t_mlx_win *mw, t_rect rect);
 int		render_map(t_mlx_win *mw);
-char	**map_to_tab(int fd, int *hw);
+void	map_to_tab(int fd, t_mlx_win *mw);
 void	render_count(t_mlx_win *mw, int count);
 int		exit_fail(t_mlx_win *mw, int x, int y);
 int		exit_success(t_mlx_win *mw);
 int		handle_input_button(int keysym, t_mlx_win *mw);
 char	*ft_itoa(int n);
+void	dpos_init(t_mlx_win	*mw);
+int		animate_danger(t_mlx_win *mw);
+void	cpos_init(t_mlx_win	*mw);
+int		animate_coin(t_mlx_win *mw);
+int		animate(t_mlx_win *mw);
+char	*ft_strjoin(char const *s1, char const *s2);
 
 #endif

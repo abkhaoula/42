@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_to_tab.c                                       :+:      :+:    :+:   */
+/*   animate.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kabdenou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -16,27 +16,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-void	map_to_tab(int fd, t_mlx_win *mw)
+int	animate(t_mlx_win *mw)
 {
-	int		i;
-	int		j;
-	char	c;
-	char	**map;
-
-	map = malloc(mw->hw[1] * sizeof(char *));
-	i = 0;
-	while (i < mw->hw[1])
-	{
-		map[i] = malloc(mw->hw[0] * sizeof(char));
-		j = 0;
-		while (j < mw->hw[0])
-		{
-			read(fd, &c, 1);
-			map[i][j] = c;
-			j++;
-		}
-		read(fd, &c, 1);
-		i++;
-	}
-	mw->map = map;
+	animate_coin(mw);
+	animate_danger(mw);
+	return (0);
 }

@@ -22,10 +22,10 @@ void	handle_xk_up(t_mlx_win *mw, void *img, int *count)
 		return ;
 	if (((mw->map[mw->pos[0] - 1][mw->pos[1]] != '1')
 		&& (mw->map[mw->pos[0] - 1][mw->pos[1]] != 'E'))
-		|| ((mw->map[mw->pos[0] - 1][mw->pos[1]] == 'E') && (!mw->coin)))
+		|| ((mw->map[mw->pos[0] - 1][mw->pos[1]] == 'E') && (!mw->coins.count)))
 	{
 		if (mw->map[mw->pos[0] - 1][mw->pos[1]] == 'C')
-			mw->coin --;
+			mw->coins.count --;
 		render_rect(mw, (t_rect){(mw->pos[1] * 50),
 			(mw->pos[0] * 50), 50, 50, 0x000000});
 		mw->map[mw->pos[0]][mw->pos[1]] = '0';
@@ -35,6 +35,7 @@ void	handle_xk_up(t_mlx_win *mw, void *img, int *count)
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
 		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
+		cpos_init(mw);
 		(*count)++;
 		render_count(mw, *count);
 	}
@@ -46,10 +47,10 @@ void	handle_xk_right(t_mlx_win *mw, void *img, int *count)
 		return ;
 	if (((mw->map[mw->pos[0]][mw->pos[1] + 1] != '1')
 		&& (mw->map[mw->pos[0]][mw->pos[1] + 1] != 'E'))
-		|| ((mw->map[mw->pos[0]][mw->pos[1] + 1] == 'E') && (!mw->coin)))
+		|| ((mw->map[mw->pos[0]][mw->pos[1] + 1] == 'E') && (!mw->coins.count)))
 	{
 		if (mw->map[mw->pos[0]][mw->pos[1] + 1] == 'C')
-			mw->coin --;
+			mw->coins.count --;
 		render_rect(mw, (t_rect){(mw->pos[1] * 50),
 			(mw->pos[0] * 50), 50, 50, 0x000000});
 		mw->map[mw->pos[0]][mw->pos[1]] = '0';
@@ -59,6 +60,7 @@ void	handle_xk_right(t_mlx_win *mw, void *img, int *count)
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
 		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
+		cpos_init(mw);
 		(*count)++;
 		render_count(mw, *count);
 	}
@@ -70,10 +72,10 @@ void	handle_xk_down(t_mlx_win *mw, void *img, int *count)
 		return ;
 	if (((mw->map[mw->pos[0] + 1][mw->pos[1]] != '1')
 		&& (mw->map[mw->pos[0] + 1][mw->pos[1]] != 'E'))
-		|| ((mw->map[mw->pos[0] + 1][mw->pos[1]] == 'E') && (!mw->coin)))
+		|| ((mw->map[mw->pos[0] + 1][mw->pos[1]] == 'E') && (!mw->coins.count)))
 	{
 		if (mw->map[mw->pos[0] + 1][mw->pos[1]] == 'C')
-			mw->coin --;
+			mw->coins.count --;
 		render_rect(mw, (t_rect){(mw->pos[1] * 50),
 			(mw->pos[0] * 50), 50, 50, 0x000000});
 		mw->map[mw->pos[0]][mw->pos[1]] = '0';
@@ -83,6 +85,7 @@ void	handle_xk_down(t_mlx_win *mw, void *img, int *count)
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
 		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
+		cpos_init(mw);
 		(*count)++;
 		render_count(mw, *count);
 	}
@@ -94,10 +97,10 @@ void	handle_xk_left(t_mlx_win *mw, void *img, int *count)
 		return ;
 	if (((mw->map[mw->pos[0]][mw->pos[1] - 1] != '1')
 		&& (mw->map[mw->pos[0]][mw->pos[1] - 1] != 'E'))
-		|| ((mw->map[mw->pos[0]][mw->pos[1] - 1] == 'E') && (!mw->coin)))
+		|| ((mw->map[mw->pos[0]][mw->pos[1] - 1] == 'E') && (!mw->coins.count)))
 	{
 		if (mw->map[mw->pos[0]][mw->pos[1] - 1] == 'C')
-			mw->coin --;
+			mw->coins.count --;
 		render_rect(mw, (t_rect){(mw->pos[1] * 50),
 			(mw->pos[0] * 50), 50, 50, 0x000000});
 		mw->map[mw->pos[0]][mw->pos[1]] = '0';
@@ -107,6 +110,7 @@ void	handle_xk_left(t_mlx_win *mw, void *img, int *count)
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
 		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
+		cpos_init(mw);
 		(*count)++;
 		render_count(mw, *count);
 	}

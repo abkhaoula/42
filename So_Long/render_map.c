@@ -74,13 +74,13 @@ void	render_elem(t_mlx_win *mw, int *xy, char c, int **pos)
 		img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/E.xpm",
 				&(int){50}, &(int){50});
 	else if (c == 'D')
-		img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/D.xpm",
+		img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/D1.xpm",
 				&(int){50}, &(int){50});
 	if (c != '0')
 		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img, xy[0], xy[1]);
 }
 
-int	*render_map_rects(t_mlx_win *mw, int fd)
+void	render_map_rects(t_mlx_win *mw, int fd)
 {
 	int		r;
 	char	c;
@@ -106,7 +106,7 @@ int	*render_map_rects(t_mlx_win *mw, int fd)
 		}
 		r = read(fd, &c, 1);
 	}
-	return (pos);
+	mw->pos = pos;
 }
 
 int	render_map(t_mlx_win *mw)
@@ -119,8 +119,8 @@ int	render_map(t_mlx_win *mw)
 		return (0);
 	close(fd);
 	fd = open("maps/simple.ber", O_RDONLY);
-	mw->coin = parse_map(fd, mw->hw);
-	if (!mw->coin)
+	mw->coins.count = parse_map(fd, mw->hw);
+	if (!mw->coins.count)
 		return (0);
 	mw->win_ptr = mlx_new_window(mw->mlx_ptr, (50 * mw->hw[0]),
 			(50 * mw->hw[1]), "So Long");
@@ -131,9 +131,9 @@ int	render_map(t_mlx_win *mw)
 	}
 	close(fd);
 	fd = open("maps/simple.ber", O_RDONLY);
-	mw->pos = render_map_rects(mw, fd);
+	render_map_rects(mw, fd);
 	close(fd);
 	fd = open("maps/simple.ber", O_RDONLY);
-	mw->map = map_to_tab(fd, mw->hw);
+	map_to_tab(fd, mw);
 	return (1);
 }
