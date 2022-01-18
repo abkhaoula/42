@@ -114,12 +114,12 @@ int	render_map(t_mlx_win *mw)
 {
 	int	fd;
 
-	fd = open("maps/simple.ber", O_RDONLY);
+	fd = open("maps/map.ber", O_RDONLY);
 	mw->hw = map_dim(fd);
 	if (!mw->hw)
 		return (0);
 	close(fd);
-	fd = open("maps/simple.ber", O_RDONLY);
+	fd = open("maps/map.ber", O_RDONLY);
 	mw->coins.count = parse_map(fd, mw->hw);
 	if (!mw->coins.count)
 		return (0);
@@ -131,10 +131,10 @@ int	render_map(t_mlx_win *mw)
 		return (0);
 	}
 	close(fd);
-	fd = open("maps/simple.ber", O_RDONLY);
+	fd = open("maps/map.ber", O_RDONLY);
 	render_map_rects(mw, fd);
 	close(fd);
-	fd = open("maps/simple.ber", O_RDONLY);
+	fd = open("maps/map.ber", O_RDONLY);
 	map_to_tab(fd, mw);
 	return (1);
 }
