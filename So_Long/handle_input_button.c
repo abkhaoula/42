@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-void	handle_xk_up(t_mlx_win *mw, void *img, int *count)
+void	handle_xk_up(t_mlx_win *mw, int *count)
 {
 	if (exit_fail(mw, mw->pos[0] - 1, mw->pos[1]))
 		return ;
@@ -33,7 +33,7 @@ void	handle_xk_up(t_mlx_win *mw, void *img, int *count)
 		if (exit_success(mw))
 			return ;
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
-		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
+		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, mw->p_img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
 		cpos_init(mw);
 		(*count)++;
@@ -41,7 +41,7 @@ void	handle_xk_up(t_mlx_win *mw, void *img, int *count)
 	}
 }
 
-void	handle_xk_right(t_mlx_win *mw, void *img, int *count)
+void	handle_xk_right(t_mlx_win *mw, int *count)
 {
 	if (exit_fail(mw, mw->pos[0], mw->pos[1] + 1))
 		return ;
@@ -58,7 +58,7 @@ void	handle_xk_right(t_mlx_win *mw, void *img, int *count)
 		if (exit_success(mw))
 			return ;
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
-		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
+		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, mw->p_img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
 		cpos_init(mw);
 		(*count)++;
@@ -66,7 +66,7 @@ void	handle_xk_right(t_mlx_win *mw, void *img, int *count)
 	}
 }
 
-void	handle_xk_down(t_mlx_win *mw, void *img, int *count)
+void	handle_xk_down(t_mlx_win *mw, int *count)
 {
 	if (exit_fail(mw, mw->pos[0] + 1, mw->pos[1]))
 		return ;
@@ -83,7 +83,7 @@ void	handle_xk_down(t_mlx_win *mw, void *img, int *count)
 		if (exit_success(mw))
 			return ;
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
-		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
+		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, mw->p_img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
 		cpos_init(mw);
 		(*count)++;
@@ -91,7 +91,7 @@ void	handle_xk_down(t_mlx_win *mw, void *img, int *count)
 	}
 }
 
-void	handle_xk_left(t_mlx_win *mw, void *img, int *count)
+void	handle_xk_left(t_mlx_win *mw, int *count)
 {
 	if (exit_fail(mw, mw->pos[0], mw->pos[1] - 1))
 		return ;
@@ -108,7 +108,7 @@ void	handle_xk_left(t_mlx_win *mw, void *img, int *count)
 		if (exit_success(mw))
 			return ;
 		mw->map[mw->pos[0]][mw->pos[1]] = 'P';
-		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, img,
+		mlx_put_image_to_window (mw->mlx_ptr, mw->win_ptr, mw->p_img,
 			(mw->pos[1] * 50), (mw->pos[0] * 50));
 		cpos_init(mw);
 		(*count)++;
@@ -118,11 +118,8 @@ void	handle_xk_left(t_mlx_win *mw, void *img, int *count)
 
 int	handle_input_button(int keysym, t_mlx_win *mw)
 {
-	void		*img;
 	static int	count;
 
-	img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/P.xpm",
-			&(int){50}, &(int){50});
 	if (keysym == XK_Escape)
 	{
 		mlx_destroy_window(mw->mlx_ptr, mw->win_ptr);
@@ -130,12 +127,20 @@ int	handle_input_button(int keysym, t_mlx_win *mw)
 		return (0);
 	}
 	else if ((keysym == XK_Up) || (keysym == XK_w))
-		handle_xk_up(mw, img, &count);
+		handle_xk_up(mw, &count);
 	else if ((keysym == XK_Right) || (keysym == XK_d))
-		handle_xk_right(mw, img, &count);
+	{
+		mw->p_img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/PR.xpm",
+				&(int){50}, &(int){50});
+		handle_xk_right(mw, &count);
+	}
 	else if ((keysym == XK_Down) || (keysym == XK_s))
-		handle_xk_down(mw, img, &count);
+		handle_xk_down(mw, &count);
 	else if ((keysym == XK_Left) || (keysym == XK_a))
-		handle_xk_left(mw, img, &count);
+	{
+		mw->p_img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/PL.xpm",
+				&(int){50}, &(int){50});
+		handle_xk_left(mw, &count);
+	}
 	return (0);
 }

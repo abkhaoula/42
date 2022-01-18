@@ -39,6 +39,7 @@ typedef struct s_mlx_win
 	int		*hw;
 	char	**map;
 	int		*pos;
+	void	*p_img;
 	t_D		danger;
 	t_C		coins;
 }	t_mlx_win;

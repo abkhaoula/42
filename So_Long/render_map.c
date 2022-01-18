@@ -61,8 +61,9 @@ void	render_elem(t_mlx_win *mw, int *xy, char c, int **pos)
 		(*pos) = malloc(2 * sizeof(int));
 		(*pos)[0] = xy[1] / 50;
 		(*pos)[1] = xy[0] / 50;
-		img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/P.xpm",
+		mw->p_img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/PL.xpm",
 				&(int){50}, &(int){50});
+		img = mw->p_img;
 	}
 	else if (c == '1')
 		img = mlx_xpm_file_to_image(mw->mlx_ptr, "./img/1.xpm",
