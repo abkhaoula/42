@@ -72,9 +72,42 @@ int	decode_pid(void)
 	return (pid);
 }
 
+void receive_pid(int *pid)
+{
+	signal(SIGUSR1, handler1);
+	if (g_num[0] == 18)
+		(*pid) = decode_pid();
+	signal(SIGUSR2, handler2);
+	if (g_num[0] == 18)
+		(*pid) = decode_pid();
+	if ((*pid) != 0)
+		g_num[0] = 1;
+}
+
+void receive_message(void)
+{
+	if (g_num[-1] != -1)
+	{
+		g_num[-1] = 0;
+	}
+	signal(SIGUSR1, handler1);
+	if (g_num[0] == 9)
+		decode();
+	signal(SIGUSR2, handler2);
+	if (g_num[0] == 9)
+		decode();
+}
+
+void reset_send(int *pid, int *timer)
+{
+	(*timer) = 0;
+	g_num[-1] = -1;
+	kill((*pid), SIGUSR1);
+	(*pid) = 0;
+}
+
 int	main(void)
 {
-	int		i;
 	pid_t	pid;
 	int		timer;
 	int		client_pid;
@@ -88,47 +121,14 @@ int	main(void)
 	while (1)
 	{
 		if (client_pid == 0)
-		{
-			signal(SIGUSR1, handler1);
-			if (g_num[0] == 18)
-				client_pid = decode_pid();
-			signal(SIGUSR2, handler2);
-			if (g_num[0] == 18)
-				client_pid = decode_pid();
-			if (client_pid != 0)
-			{
-				g_num[0] = 1;
-				i = 1;
-				while (i < 20)
-				{
-					g_num[i] = 0;
-					i++;
-				}
-			}
-		}
+			receive_pid(&client_pid);
 		else
-		{
-			if (g_num[-1] != -1)
-			{
-				g_num[-1] = 0;
-			}
-			signal(SIGUSR1, handler1);
-			if (g_num[0] == 9)
-				decode();
-			signal(SIGUSR2, handler2);
-			if (g_num[0] == 9)
-				decode();
-		}
+			receive_message();
 		if (g_num[-1] == 0)
 			timer++;
 		else
 			timer = 0;
 		if (timer == 100000)
-		{
-			timer = 0;
-			g_num[-1] = -1;
-			kill(client_pid, SIGUSR1);
-			client_pid = 0;
-		}
+			reset_send(&client_pid, &timer);
 	}
 }
