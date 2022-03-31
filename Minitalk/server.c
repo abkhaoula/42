@@ -64,7 +64,7 @@ int	decode_pid(void)
 
 	i = 17;
 	pid = 0;
-	while(i > 0)
+	while (i > 0)
 	{
 		pid = (pid * 2) + g_num[i];
 		i--;

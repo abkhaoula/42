@@ -53,12 +53,12 @@ void	stob_sig(int pid, char *message)
 
 void	itob_sig(int pid, int n)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(n)
+	while (n)
 	{
-		if (n%2)
+		if (n % 2)
 		{
 			kill(pid, SIGUSR1);
 			usleep(0.5);
@@ -68,7 +68,7 @@ void	itob_sig(int pid, int n)
 			kill(pid, SIGUSR2);
 			usleep(0.5);
 		}
-		n = (n-n%2)/2;
+		n = (n - n % 2) / 2;
 		i++;
 	}
 	while (i < 17)
@@ -90,7 +90,7 @@ int	main(int argc, char **argv)
 	server_pid = ft_atoi(argv[1]);
 	itob_sig(server_pid, client_pid);
 	stob_sig(server_pid, argv[2]);
-	while(1)
+	while (1)
 	{
 		signal(SIGUSR1, handler);
 	}
