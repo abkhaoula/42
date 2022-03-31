@@ -16,7 +16,7 @@
 
 int	g_num[20];
 
-void	handler1(int signum)
+void	handler(int signum)
 {
 	if (signum == SIGUSR1)
 	{
@@ -24,10 +24,6 @@ void	handler1(int signum)
 		g_num[g_num[0]] = 1;
 		g_num[0]++;
 	}
-}
-
-void	handler2(int signum)
-{
 	if (signum == SIGUSR2)
 	{
 		g_num[-1] = 1;
@@ -72,33 +68,33 @@ int	decode_pid(void)
 	return (pid);
 }
 
-void receive_pid(int *pid)
+void	receive_pid(int *pid)
 {
-	signal(SIGUSR1, handler1);
+	signal(SIGUSR1, handler);
 	if (g_num[0] == 18)
 		(*pid) = decode_pid();
-	signal(SIGUSR2, handler2);
+	signal(SIGUSR2, handler);
 	if (g_num[0] == 18)
 		(*pid) = decode_pid();
 	if ((*pid) != 0)
 		g_num[0] = 1;
 }
 
-void receive_message(void)
+void	receive_message(void)
 {
 	if (g_num[-1] != -1)
 	{
 		g_num[-1] = 0;
 	}
-	signal(SIGUSR1, handler1);
+	signal(SIGUSR1, handler);
 	if (g_num[0] == 9)
 		decode();
-	signal(SIGUSR2, handler2);
+	signal(SIGUSR2, handler);
 	if (g_num[0] == 9)
 		decode();
 }
 
-void reset_send(int *pid, int *timer)
+void	reset_send(int *pid, int *timer)
 {
 	(*timer) = 0;
 	g_num[-1] = -1;
