@@ -96,14 +96,6 @@ void	receive_pid_message(int *pid)
 	}
 }
 
-void	reset_send(int *pid, int *timer)
-{
-	(*timer) = 0;
-	g_num[-1] = -1;
-	kill((*pid), SIGUSR1);
-	(*pid) = 0;
-}
-
 int	main(void)
 {
 	pid_t	pid;
@@ -124,6 +116,11 @@ int	main(void)
 		else
 			timer = 0;
 		if (timer == 100000)
-			reset_send(&client_pid, &timer);
+		{
+			timer = 0;
+			g_num[-1] = -1;
+			kill(client_pid, SIGUSR1);
+			client_pid = 0;
+		}
 	}
 }
