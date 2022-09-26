@@ -16,6 +16,9 @@
 #include <pthread.h>
 #include <sys/time.h>
 #include <string.h>
+# include <semaphore.h>
+#include <fcntl.h>
+#include <signal.h>
 
 typedef struct s_state
 {
@@ -32,10 +35,25 @@ typedef struct s_state
 	int *philo_action;
 	int *philo_waiting_to_eat;
 	int time_start;
-	pthread_mutex_t writing;
-	pthread_mutex_t *forking;
-	pthread_mutex_t *is_dying;
+	pid_t *process_id;
+	sem_t *writing;
+	sem_t *forking;
+	sem_t **is_dying;
 } t_state;
+
+
+char *join(const char* s1, const char* s2)
+{
+    char* result = malloc(strlen(s1) + strlen(s2) + 1);
+
+    if (result) // thanks @pmg
+    {
+        strcpy(result, s1);
+        strcat(result, s2);
+    }
+
+    return result;
+}
 
 char* itoa(int val, int base){
 	
@@ -58,6 +76,7 @@ t_state init_state(int philo_num, int die_time, int eat_time, int sleep_time, in
 	int i;
 	t_state s;
 	struct timeval	t;
+	char *semisdying;
 
 	s.died_num = 0;
 	s.full_num = 0;
@@ -74,17 +93,26 @@ t_state init_state(int philo_num, int die_time, int eat_time, int sleep_time, in
 	gettimeofday(&t, NULL);
 	s.time_start = (t.tv_sec * 1000) + (t.tv_usec / 1000);
 	i = 0;
-	pthread_mutex_init(&(s.writing), NULL);
-	s.forking = malloc(philo_num * sizeof(pthread_mutex_t));
-	s.is_dying = malloc(philo_num * sizeof(pthread_mutex_t));
+	sem_unlink("writing");
+	s.writing = sem_open("writing", O_CREAT, S_IRWXU, 1);
+	//pthread_mutex_init(&(s.writing), NULL);
+	sem_unlink("forks");
+	s.forking = sem_open("forks", O_CREAT, S_IRWXU, philo_num);
+	//s.forking = malloc(philo_num * sizeof(pthread_mutex_t));
+	s.is_dying = malloc(philo_num * sizeof(sem_t*));
+	//s.is_dying = malloc(philo_num * sizeof(pthread_mutex_t));
+	s.process_id = malloc(philo_num * sizeof(pid_t));
+	semisdying = "dying";
 	while (i < philo_num)
 	{
 		s.forks[i] = 1;
 		s.philo_died[i] = 0;
 		s.philo_action[i] = 0;
 		s.philo_waiting_to_eat[i] = s.time_start;
-		pthread_mutex_init(&(s.forking[i]), NULL);
-		pthread_mutex_init(&(s.is_dying[i]), NULL);
+		sem_unlink((const char *)join("dying", (const char *)itoa(i, 10)));
+		s.is_dying[i] = sem_open((const char *)join("dying", (const char *)itoa(i, 10)), O_CREAT, S_IRWXU, 1);
+		//pthread_mutex_init(&(s.forking[i]), NULL);
+		//pthread_mutex_init(&(s.is_dying[i]), NULL);
 		i++;
 	}
 	return (s);
@@ -115,8 +143,10 @@ void *myThreadFun(void *state)
 		{
 			if (((t_state *)state)->forks[(id-1) % ((t_state *)state)->philo_num] && ((t_state *)state)->forks[(id) % ((t_state *)state)->philo_num])
 			{
-				pthread_mutex_lock(&((t_state *)state)->forking[(id-1) % ((t_state *)state)->philo_num]);
-				pthread_mutex_lock(&((t_state *)state)->writing);
+				sem_wait(((t_state *)state)->forking);
+				//pthread_mutex_lock(&((t_state *)state)->forking[(id-1) % ((t_state *)state)->philo_num]);
+				sem_wait(((t_state *)state)->writing);
+				//pthread_mutex_lock(&((t_state *)state)->writing);
 				gettimeofday(&t, NULL);
 				tmp_time = (t.tv_sec * 1000) + (t.tv_usec / 1000) - ((t_state *)state)->time_start;
 				time_tmp = itoa(tmp_time,10);
@@ -124,9 +154,12 @@ void *myThreadFun(void *state)
 				write(1, " : philo", 9);
 				write(1, &idc, 1);
 				write(1, " : took a fork\n", 16);
-				pthread_mutex_unlock(&((t_state *)state)->writing);
-				pthread_mutex_lock(&((t_state *)state)->forking[(id) % ((t_state *)state)->philo_num]);
-				pthread_mutex_lock(&((t_state *)state)->writing);
+				sem_post(((t_state *)state)->writing);
+				//pthread_mutex_unlock(&((t_state *)state)->writing);
+				sem_wait(((t_state *)state)->forking);
+				//pthread_mutex_lock(&((t_state *)state)->forking[(id) % ((t_state *)state)->philo_num]);
+				sem_wait(((t_state *)state)->writing);
+				//pthread_mutex_lock(&((t_state *)state)->writing);
 				gettimeofday(&t, NULL);
 				tmp_time = (t.tv_sec * 1000) + (t.tv_usec / 1000) - ((t_state *)state)->time_start;
 				time_tmp = itoa(tmp_time,10);
@@ -134,27 +167,33 @@ void *myThreadFun(void *state)
 				write(1, " : philo", 9);
 				write(1, &idc, 1);
 				write(1, " : took a fork\n", 16);
-				pthread_mutex_unlock(&((t_state *)state)->writing);
+				sem_post(((t_state *)state)->writing);
+				//pthread_mutex_unlock(&((t_state *)state)->writing);
 				((t_state *)state)->forks[(id-1) % ((t_state *)state)->philo_num] = 0;
 				((t_state *)state)->forks[(id) % ((t_state *)state)->philo_num] = 0;
 				((t_state *)state)->philo_action[id - 1] = 1;
 			}
 		}
-		pthread_mutex_lock(&((t_state *)state)->is_dying[id-1]);
+		sem_wait(((t_state *)state)->is_dying[id-1]);
+		//pthread_mutex_lock(&((t_state *)state)->is_dying[id-1]);
 		if (((t_state *)state)->philo_action[id - 1] == 1) //eating
 		{
-			pthread_mutex_lock(&((t_state *)state)->writing);
+			sem_wait(((t_state *)state)->writing);
+			//pthread_mutex_lock(&((t_state *)state)->writing);
 			tmp_time = (t.tv_sec * 1000) + (t.tv_usec / 1000) - ((t_state *)state)->time_start;
 			time_tmp = itoa(tmp_time,10);
 			write(1, time_tmp, strlen(time_tmp));
 			write(1, " : philo", 9);
 			write(1, &idc, 1);
 			write(1, " : eating\n", 11);
-			pthread_mutex_unlock(&((t_state *)state)->writing);
+			sem_post(((t_state *)state)->writing);
+			//pthread_mutex_unlock(&((t_state *)state)->writing);
 			eating_num++;
 			usleep(((t_state *)state)->eat_time * 1000);
-			pthread_mutex_unlock(&((t_state *)state)->forking[(id-1) % ((t_state *)state)->philo_num]);
-			pthread_mutex_unlock(&((t_state *)state)->forking[(id) % ((t_state *)state)->philo_num]);
+			sem_post(((t_state *)state)->forking);
+			sem_post(((t_state *)state)->forking);
+			//pthread_mutex_unlock(&((t_state *)state)->forking[(id-1) % ((t_state *)state)->philo_num]);
+			//pthread_mutex_unlock(&((t_state *)state)->forking[(id) % ((t_state *)state)->philo_num]);
 			
 			((t_state *)state)->forks[(id-1) % ((t_state *)state)->philo_num] = 1;
 			((t_state *)state)->forks[(id) % ((t_state *)state)->philo_num] = 1;
@@ -167,10 +206,12 @@ void *myThreadFun(void *state)
 			}
 
 		}
-		pthread_mutex_unlock(&((t_state *)state)->is_dying[id-1]);
+		//pthread_mutex_unlock(&((t_state *)state)->is_dying[id-1]);
+		sem_post(((t_state *)state)->is_dying[id-1]);
 		if (((t_state *)state)->philo_action[id - 1] == 2) //sleeping
 		{
-			pthread_mutex_lock(&((t_state *)state)->writing);
+			sem_wait(((t_state *)state)->writing);
+			//pthread_mutex_lock(&((t_state *)state)->writing);
 			gettimeofday(&t, NULL);
 			tmp_time = (t.tv_sec * 1000) + (t.tv_usec / 1000) - ((t_state *)state)->time_start;
 			time_tmp = itoa(tmp_time,10);
@@ -178,16 +219,19 @@ void *myThreadFun(void *state)
 			write(1, " : philo", 9);
 			write(1, &idc, 1);
 			write(1, " : sleeping\n", 13);
-			pthread_mutex_unlock(&((t_state *)state)->writing);
+			sem_post(((t_state *)state)->writing);
+			//pthread_mutex_unlock(&((t_state *)state)->writing);
 			usleep(((t_state *)state)->sleep_time * 1000);
-			pthread_mutex_lock(&((t_state *)state)->writing);
+			sem_wait(((t_state *)state)->writing);
+			//pthread_mutex_lock(&((t_state *)state)->writing);
 			tmp_time = (t.tv_sec * 1000) + (t.tv_usec / 1000) - ((t_state *)state)->time_start + ((t_state *)state)->sleep_time;
 			time_tmp = itoa(tmp_time,10);
 			write(1, time_tmp, strlen(time_tmp));
 			write(1, " : philo", 9);
 			write(1, &idc, 1);
 			write(1, " : thinking\n", 13);
-			pthread_mutex_unlock(&((t_state *)state)->writing);
+			sem_post(((t_state *)state)->writing);
+			//pthread_mutex_unlock(&((t_state *)state)->writing);
 			((t_state *)state)->philo_waiting_to_eat[id - 1] = (t.tv_sec * 1000) + (t.tv_usec / 1000);
 			((t_state *)state)->philo_action[id - 1] = 0;
 		}
@@ -209,21 +253,25 @@ int death_update(t_state *s)
 	while (i < s->philo_num)
 	{
 		ic = '0' + i;
-		pthread_mutex_lock(&s->is_dying[i]);
+		sem_wait(s->is_dying[i]);
+		//pthread_mutex_lock(&s->is_dying[i]);
 		if (!s->philo_died[i] && s->philo_action[i] == 0 && ((time - s->philo_waiting_to_eat[i]) > s->die_time))
 		{
-			pthread_mutex_lock(&s->writing);
+			sem_wait(s->writing);
+			//pthread_mutex_lock(&s->writing);
 			time_tmp = itoa(time - s->time_start,10);
 			write(1, time_tmp, strlen(time_tmp));
 			write(1, " : philo", 9);
 			write(1, &ic, 1);
 			write(1, " : died\n", 9);
-			pthread_mutex_unlock(&s->writing);
+			sem_post(s->writing);
+			//pthread_mutex_unlock(&s->writing);
 			s->philo_died[i] = 1;
 			s->died_num ++;
 			s->philo_action[i] = -1; 
 		}
-		pthread_mutex_unlock(&s->is_dying[i]);
+		//pthread_mutex_unlock(&s->is_dying[i]);
+		sem_post(s->is_dying[i]);
 		i++;
 	}
 }
@@ -260,13 +308,25 @@ int	main (int argc, char **argv)
 	philosopher = malloc(sizeof(pthread_t) * philo_num);
 	while (i < philo_num)
 	{
-		pthread_create(&philosopher[i], NULL, myThreadFun, &s);
+		s.process_id[i] = fork();
+		if(s.process_id[i] < 0)
+			return (1);
+		if (s.process_id[i] == 0)
+			myThreadFun(&s);
 		usleep(100);
 		i++;
 	}
 	while((s.died_num + s.full_num) != philo_num)
 	{
 		death_update(&s);
+		//write(1, "end\n", 5);
 	}
-	pthread_mutex_destroy(&(s.writing));
+	//pthread_mutex_destroy(&(s.writing));
+	//sem_close(rules->forks);
+	//sem_unlink("/philo_forks");
+	write(1, "end\n", 5);
+	while(i < philo_num)
+	{
+		kill(s.process_id[i], SIGKILL);
+	}
 }
