@@ -155,7 +155,7 @@ void *myThreadFun(void *state)
 			((t_state *)state)->forks[(id-1) % ((t_state *)state)->philo_num] = 1;
 			((t_state *)state)->forks[(id) % ((t_state *)state)->philo_num] = 1;
 			((t_state *)state)->philo_action[id - 1] = 2;
-			if (eating_num == ((t_state *)state)->max_eat_time)
+			if (eating_num == ((t_state *)state)->max_eat_time && ((t_state *)state)->max_eat_time > 0)
 			{
 				((t_state *)state)->philo_died[id - 1] = 1;
 				((t_state *)state)->full_num ++;
@@ -204,10 +204,10 @@ int death_update(t_state *s)
 	while (i < s->philo_num)
 	{
 		ic = '0' + i;
-		if (!s->philo_died[i] && s->philo_action == 0 && ((time - s->philo_waiting_to_eat[i]) > s->die_time))
+		if (!s->philo_died[i] && s->philo_action[i] == 0 && ((time - s->philo_waiting_to_eat[i]) > s->die_time))
 		{
 			pthread_mutex_lock(&s->writing);
-			time_tmp = itoa(time,10);
+			time_tmp = itoa(time - s->time_start,10);
 			write(1, time_tmp, strlen(time_tmp));
 			write(1, " : philo", 9);
 			write(1, &ic, 1);
@@ -215,7 +215,6 @@ int death_update(t_state *s)
 			pthread_mutex_unlock(&s->writing);
 			s->philo_died[i] = 1;
 			s->died_num ++;
-			printf("died_num %i\n", s->died_num);
 		}
 		i++;
 	}
@@ -235,7 +234,7 @@ int	main (int argc, char **argv)
 
 	str = "hello";
 
-	if (argc != 6)
+	if (argc != 6 && argc != 5)
 	{
 		write(1, "Wrong number of arguments\n", 27);
 		return(0);
@@ -244,7 +243,9 @@ int	main (int argc, char **argv)
 	die_time = atoi(argv[2]);
 	eat_time = atoi(argv[3]);
 	sleep_time = atoi(argv[4]);
-	max_eat_time = atoi(argv[5]);
+	max_eat_time = -1;
+	if (argc == 6)
+		max_eat_time = atoi(argv[5]);
 	s = init_state(philo_num, die_time, eat_time, sleep_time, max_eat_time);
 
 	i = 0;
@@ -252,6 +253,7 @@ int	main (int argc, char **argv)
 	while (i < philo_num)
 	{
 		pthread_create(&philosopher[i], NULL, myThreadFun, &s);
+		//usleep(1);
 		i++;
 	}
 	while((s.died_num + s.full_num) != philo_num)
