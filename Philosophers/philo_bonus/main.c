@@ -34,6 +34,7 @@ typedef struct s_state
 	int time_start;
 	pthread_mutex_t writing;
 	pthread_mutex_t *forking;
+	pthread_mutex_t *is_dying;
 } t_state;
 
 char* itoa(int val, int base){
@@ -75,6 +76,7 @@ t_state init_state(int philo_num, int die_time, int eat_time, int sleep_time, in
 	i = 0;
 	pthread_mutex_init(&(s.writing), NULL);
 	s.forking = malloc(philo_num * sizeof(pthread_mutex_t));
+	s.is_dying = malloc(philo_num * sizeof(pthread_mutex_t));
 	while (i < philo_num)
 	{
 		s.forks[i] = 1;
@@ -82,6 +84,7 @@ t_state init_state(int philo_num, int die_time, int eat_time, int sleep_time, in
 		s.philo_action[i] = 0;
 		s.philo_waiting_to_eat[i] = s.time_start;
 		pthread_mutex_init(&(s.forking[i]), NULL);
+		pthread_mutex_init(&(s.is_dying[i]), NULL);
 		i++;
 	}
 	return (s);
@@ -137,6 +140,7 @@ void *myThreadFun(void *state)
 				((t_state *)state)->philo_action[id - 1] = 1;
 			}
 		}
+		pthread_mutex_lock(&((t_state *)state)->is_dying[id-1]);
 		if (((t_state *)state)->philo_action[id - 1] == 1) //eating
 		{
 			pthread_mutex_lock(&((t_state *)state)->writing);
@@ -163,6 +167,7 @@ void *myThreadFun(void *state)
 			}
 
 		}
+		pthread_mutex_unlock(&((t_state *)state)->is_dying[id-1]);
 		if (((t_state *)state)->philo_action[id - 1] == 2) //sleeping
 		{
 			pthread_mutex_lock(&((t_state *)state)->writing);
@@ -204,6 +209,7 @@ int death_update(t_state *s)
 	while (i < s->philo_num)
 	{
 		ic = '0' + i;
+		pthread_mutex_lock(&s->is_dying[i]);
 		if (!s->philo_died[i] && s->philo_action[i] == 0 && ((time - s->philo_waiting_to_eat[i]) > s->die_time))
 		{
 			pthread_mutex_lock(&s->writing);
@@ -215,7 +221,9 @@ int death_update(t_state *s)
 			pthread_mutex_unlock(&s->writing);
 			s->philo_died[i] = 1;
 			s->died_num ++;
+			s->philo_action[i] = -1; 
 		}
+		pthread_mutex_unlock(&s->is_dying[i]);
 		i++;
 	}
 }
@@ -253,7 +261,7 @@ int	main (int argc, char **argv)
 	while (i < philo_num)
 	{
 		pthread_create(&philosopher[i], NULL, myThreadFun, &s);
-		//usleep(1);
+		usleep(100);
 		i++;
 	}
 	while((s.died_num + s.full_num) != philo_num)
