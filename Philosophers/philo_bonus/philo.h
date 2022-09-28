@@ -6,7 +6,7 @@
 /*   By: kabdenou <kabdenou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 10:26:48 by kabdenou          #+#    #+#             */
-/*   Updated: 2022/09/18 12:30:31 by kabdenou         ###   ########.fr       */
+/*   Updated: 2022/09/28 14:45:39 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,17 @@
 # include <semaphore.h>
 # include <fcntl.h>
 # include <sys/stat.h>
+# include <stdatomic.h>
 
 struct	s_env;
 
 typedef struct s_philo
 {
-	int					id;
-	int					ate;
-	int					left_fork_id;
-	int					right_fork_id;
-	long long			t_last_meal;
+	atomic_int					id;
+	atomic_int					ate;
+	atomic_int					left_fork_id;
+	atomic_int					right_fork_id;
+	atomic_llong			t_last_meal;
 	struct s_env		*env;
 	pthread_t			dead_check;
 	pid_t				pid;
@@ -41,13 +42,13 @@ typedef struct s_philo
 
 typedef struct s_env
 {
-	int					nb_philo;
-	int					time_death;
-	int					time_eat;
-	int					time_sleep;
-	int					nb_eat;
-	int					dieded;
-	long long			start_timestamp;
+	atomic_int					nb_philo;
+	atomic_int					time_death;
+	atomic_int					time_eat;
+	atomic_int					time_sleep;
+	atomic_int					nb_eat;
+	atomic_int					dieded;
+	atomic_llong			start_timestamp;
 	sem_t				*eat_die;
 	sem_t				*forks;
 	sem_t				*writing;

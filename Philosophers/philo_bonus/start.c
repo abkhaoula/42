@@ -6,7 +6,7 @@
 /*   By: kabdenou <kabdenou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 10:26:48 by kabdenou          #+#    #+#             */
-/*   Updated: 2022/09/18 12:30:31 by kabdenou         ###   ########.fr       */
+/*   Updated: 2022/09/28 14:54:09 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	*is_dead(void *philo_)
 		sem_post(env->eat_die);
 		if (env->dieded)
 			break ;
-		usleep(1000);
 		if (philo->ate >= env->nb_eat && env->nb_eat != -1)
 			break ;
 	}
@@ -67,8 +66,6 @@ void	handler(void *philo_)
 	env = philo->env;
 	philo->t_last_meal = timestamp();
 	pthread_create(&(philo->dead_check), NULL, is_dead, philo_);
-	if (philo->id % 2)
-		usleep(15000);
 	while (!(env->dieded))
 	{
 		philo_eats(philo);
