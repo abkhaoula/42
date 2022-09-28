@@ -6,7 +6,7 @@
 /*   By: kabdenou <kabdenou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 10:26:48 by kabdenou          #+#    #+#             */
-/*   Updated: 2022/09/28 14:29:49 by kabdenou         ###   ########.fr       */
+/*   Updated: 2022/09/28 15:12:24 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ void	*handler(void *philo_)
 	i = 0;
 	philo = (t_philo *)philo_;
 	env = philo->env;
-	if (philo->id % 2)
-		usleep(15000);
 	while (!(env->dieded))
 	{
 		philo_eats(philo);
@@ -54,7 +52,7 @@ void	*handler(void *philo_)
 			break ;
 		action_print(env, philo->id, "is sleeping");
 		pthread_mutex_unlock(&(env->eat_die));
-		usleep(env->time_eat * 1000);
+		usleep(env->time_sleep * 1000);
 		pthread_mutex_lock(&(env->eat_die));
 		action_print(env, philo->id, "is thinking");
 		pthread_mutex_unlock(&(env->eat_die));
@@ -63,7 +61,6 @@ void	*handler(void *philo_)
 	return (NULL);
 }
 
-//void	end(t_env *env, t_philo *philo)
 void	end(t_env *env)
 {
 	int	i;
@@ -93,7 +90,6 @@ void	is_dead(t_env *env, t_philo *p)
 				env->dieded = 1;
 			}
 			pthread_mutex_unlock(&(env->eat_die));
-			//usleep(100); // why
 			i++;
 		}
 		if (env->dieded)
@@ -121,10 +117,10 @@ void	start(t_env *env)
 	{
 		philo[i].t_last_meal = timestamp();
 		pthread_create(&(philo[i].thread_num), NULL, handler, &(philo[i]));
+		usleep(20);
 		pthread_detach(philo[i].thread_num);
 		i++;
 	}
 	is_dead(env, env->philo);
 	end(env);
-	//end(env, philo);
 }
