@@ -6,7 +6,7 @@
 /*   By: kabdenou <kabdenou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 10:26:48 by kabdenou          #+#    #+#             */
-/*   Updated: 2022/09/28 13:57:59 by kabdenou         ###   ########.fr       */
+/*   Updated: 2022/09/28 14:29:49 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,19 @@ void	philo_eats(t_philo *philo)
 
 	env = philo->env;
 	pthread_mutex_lock(&(env->forks[philo->left_fork_id]));
+	pthread_mutex_lock(&(env->eat_die));
 	action_print(env, philo->id, "has taken a fork");
+	pthread_mutex_unlock(&(env->eat_die));
 	pthread_mutex_lock(&(env->forks[philo->right_fork_id]));
+	pthread_mutex_lock(&(env->eat_die));
 	action_print(env, philo->id, "has taken a fork");
+	pthread_mutex_unlock(&(env->eat_die));
 	pthread_mutex_lock(&(env->eat_die));
 	action_print(env, philo->id, "is eating");
 	philo->t_last_meal = timestamp();
+	(philo->ate)++;
 	pthread_mutex_unlock(&(env->eat_die));
 	usleep(env->time_eat * 1000);
-	(philo->ate)++;
 	pthread_mutex_unlock(&(env->forks[philo->left_fork_id]));
 	pthread_mutex_unlock(&(env->forks[philo->right_fork_id]));
 }
@@ -45,11 +49,15 @@ void	*handler(void *philo_)
 	while (!(env->dieded))
 	{
 		philo_eats(philo);
+		pthread_mutex_lock(&(env->eat_die));
 		if (env->all_ate)
 			break ;
 		action_print(env, philo->id, "is sleeping");
+		pthread_mutex_unlock(&(env->eat_die));
 		usleep(env->time_eat * 1000);
+		pthread_mutex_lock(&(env->eat_die));
 		action_print(env, philo->id, "is thinking");
+		pthread_mutex_unlock(&(env->eat_die));
 		i++;
 	}
 	return (NULL);
@@ -63,7 +71,6 @@ void	end(t_env *env)
 	i = 0;
 	while (i < env->nb_philo)
 	{
-		//pthread_join(philo[i].thread_num, NULL);
 		pthread_mutex_destroy(&(env->forks[i]));
 		i++;
 	}
@@ -92,11 +99,13 @@ void	is_dead(t_env *env, t_philo *p)
 		if (env->dieded)
 			break ;
 		i = 0;
+		pthread_mutex_lock(&(env->eat_die));
 		while (env->nb_eat != -1
 			&& i < env->nb_philo && p[i].ate >= env->nb_eat)
 			i++;
 		if (i == env->nb_philo)
 			env->all_ate = 1;
+		pthread_mutex_unlock(&(env->eat_die));
 	}
 }
 
@@ -112,6 +121,7 @@ void	start(t_env *env)
 	{
 		philo[i].t_last_meal = timestamp();
 		pthread_create(&(philo[i].thread_num), NULL, handler, &(philo[i]));
+		pthread_detach(philo[i].thread_num);
 		i++;
 	}
 	is_dead(env, env->philo);
