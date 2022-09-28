@@ -6,7 +6,7 @@
 /*   By: kabdenou <kabdenou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 10:26:48 by kabdenou          #+#    #+#             */
-/*   Updated: 2022/09/18 12:30:31 by kabdenou         ###   ########.fr       */
+/*   Updated: 2022/09/28 13:57:59 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ void	start(t_env *env)
 	env->start_timestamp = timestamp();
 	while (i < env->nb_philo)
 	{
-		pthread_create(&(philo[i].thread_num), NULL, handler, &(philo[i]));
 		philo[i].t_last_meal = timestamp();
+		pthread_create(&(philo[i].thread_num), NULL, handler, &(philo[i]));
 		i++;
 	}
 	is_dead(env, env->philo);
