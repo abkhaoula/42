@@ -6,7 +6,7 @@
 /*   By: kabdenou <kabdenou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 10:26:48 by kabdenou          #+#    #+#             */
-/*   Updated: 2022/09/18 12:30:31 by kabdenou         ###   ########.fr       */
+/*   Updated: 2022/09/28 15:13:24 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,28 @@ void	init(t_env *env, char **argv)
 int	main(int argc, char **argv)
 {
 	t_env	env;
+	int i;
+	int j;
 
 	if (argc != 5 && argc != 6)
 	{
 		write(1, "Wrong number of arguments\n", 27);
 		return (0);
+	}
+	i = 1;
+	while(argv[i])
+	{
+		j = 0;
+		while (argv[i][j])
+		{
+			if (argv[i][j] < '0' || argv[i][j] > '9')
+			{
+				write(1, "Arguments should all be numbers no signs allowed\n", 50);
+				return (0);
+			}
+			j++;
+		}
+		i++;
 	}
 	init(&env, argv);
 	start(&env);
