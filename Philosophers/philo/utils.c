@@ -76,3 +76,13 @@ void	action_print(t_env *env, int id, char *string)
 	pthread_mutex_unlock(&(env->writing));
 	return ;
 }
+
+void		sleepers(long long duration_time, long long start_time, t_env *env)
+{
+	while (!(env->dieded))
+	{
+		if ((timestamp() - start_time) >= duration_time)
+			break ;
+		usleep(50);
+	}
+}

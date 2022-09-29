@@ -30,7 +30,7 @@ void	philo_eats(t_philo *philo)
 	philo->t_last_meal = timestamp();
 	(philo->ate)++;
 	pthread_mutex_unlock(&(env->eat_die));
-	usleep(env->time_eat * 1000);
+	sleepers(env->time_eat, philo->t_last_meal, env);
 	pthread_mutex_unlock(&(env->forks[philo->left_fork_id]));
 	pthread_mutex_unlock(&(env->forks[philo->right_fork_id]));
 }
@@ -52,7 +52,7 @@ void	*handler(void *philo_)
 			break ;
 		action_print(env, philo->id, "is sleeping");
 		pthread_mutex_unlock(&(env->eat_die));
-		usleep(env->time_sleep * 1000);
+		sleepers(env->time_eat + env->time_sleep, philo->t_last_meal, env);
 		pthread_mutex_lock(&(env->eat_die));
 		action_print(env, philo->id, "is thinking");
 		pthread_mutex_unlock(&(env->eat_die));
@@ -117,7 +117,7 @@ void	start(t_env *env)
 	{
 		philo[i].t_last_meal = timestamp();
 		pthread_create(&(philo[i].thread_num), NULL, handler, &(philo[i]));
-		usleep(20);
+		usleep(100);
 		pthread_detach(philo[i].thread_num);
 		i++;
 	}

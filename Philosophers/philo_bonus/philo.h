@@ -60,5 +60,6 @@ void					action_print(t_env *env, int id, char *string);
 long long				timestamp(void);
 void					start(t_env *env);
 void					end(t_env *env);
+void					sleepers(long long duration_time, long long start_time, t_env *env);
 
 #endif

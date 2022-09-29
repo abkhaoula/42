@@ -25,7 +25,7 @@ void	philo_eats(t_philo *philo)
 	action_print(env, philo->id, "is eating");
 	philo->t_last_meal = timestamp();
 	sem_post(env->eat_die);
-	usleep(env->time_eat * 1000);
+	sleepers(env->time_eat, philo->t_last_meal, env);
 	(philo->ate)++;
 	sem_post(env->forks);
 	sem_post(env->forks);
@@ -72,7 +72,7 @@ void	handler(void *philo_)
 		if (philo->ate >= env->nb_eat && env->nb_eat != -1)
 			break ;
 		action_print(env, philo->id, "is sleeping");
-		usleep(env->time_sleep * 1000);
+		sleepers(env->time_eat + env->time_sleep, philo->t_last_meal, env);
 		action_print(env, philo->id, "is thinking");
 	}
 	pthread_join(philo->dead_check, NULL);
