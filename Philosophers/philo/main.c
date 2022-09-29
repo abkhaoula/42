@@ -6,7 +6,7 @@
 /*   By: kabdenou <kabdenou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 10:26:48 by kabdenou          #+#    #+#             */
-/*   Updated: 2022/09/28 15:02:28 by kabdenou         ###   ########.fr       */
+/*   Updated: 2022/09/29 10:19:23 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,32 +59,41 @@ void	init(t_env *env, char **argv)
 	init_philos(env);
 }
 
-int	main(int argc, char **argv)
+int	check_entries(int argc, char **argv)
 {
-	t_env	env;
-	int i;
-	int j;
+	int		i;
+	int		j;
 
 	if (argc != 5 && argc != 6)
 	{
 		write(1, "Wrong number of arguments\n", 27);
-		return (0);
+		return (1);
 	}
 	i = 1;
-	while(argv[i])
+	while (argv[i])
 	{
 		j = 0;
 		while (argv[i][j])
 		{
 			if (argv[i][j] < '0' || argv[i][j] > '9')
 			{
-				write(1, "Arguments should all be numbers no signs allowed\n", 50);
-				return (0);
+				write(1, "Arguments should all be numbers no signs allowed\n",
+					50);
+				return (1);
 			}
 			j++;
 		}
 		i++;
 	}
+	return (0);
+}
+
+int	main(int argc, char **argv)
+{
+	t_env	env;
+
+	if (check_entries(argc, argv))
+		return (0);
 	init(&env, argv);
 	start(&env);
 	return (0);

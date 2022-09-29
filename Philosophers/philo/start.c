@@ -6,7 +6,7 @@
 /*   By: kabdenou <kabdenou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 10:26:48 by kabdenou          #+#    #+#             */
-/*   Updated: 2022/09/28 15:12:24 by kabdenou         ###   ########.fr       */
+/*   Updated: 2022/09/29 10:24:39 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ void	is_dead(t_env *env, t_philo *p)
 
 	while (!(env->all_ate))
 	{
-		i = 0;
-		while (i < env->nb_philo && !(env->dieded))
+		i = -1;
+		while (++i < env->nb_philo && !(env->dieded))
 		{
 			pthread_mutex_lock(&(env->eat_die));
 			if ((timestamp() - p[i].t_last_meal) > env->time_death)
@@ -90,15 +90,13 @@ void	is_dead(t_env *env, t_philo *p)
 				env->dieded = 1;
 			}
 			pthread_mutex_unlock(&(env->eat_die));
-			i++;
 		}
 		if (env->dieded)
 			break ;
-		i = 0;
+		i = -1;
 		pthread_mutex_lock(&(env->eat_die));
 		while (env->nb_eat != -1
-			&& i < env->nb_philo && p[i].ate >= env->nb_eat)
-			i++;
+			&& ++i < env->nb_philo && p[i].ate >= env->nb_eat);
 		if (i == env->nb_philo)
 			env->all_ate = 1;
 		pthread_mutex_unlock(&(env->eat_die));

@@ -6,7 +6,7 @@
 /*   By: kabdenou <kabdenou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 10:26:48 by kabdenou          #+#    #+#             */
-/*   Updated: 2022/09/28 14:41:58 by kabdenou         ###   ########.fr       */
+/*   Updated: 2022/09/29 10:13:56 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ typedef struct s_philo
 	atomic_int					left_fork_id;
 	atomic_int					right_fork_id;
 	atomic_llong				t_last_meal;
-	struct s_env		*env;
-	pthread_t			thread_num;
-}						t_philo;
+	struct s_env				*env;
+	pthread_t					thread_num;
+}								t_philo;
 
 typedef struct s_env
 {
@@ -44,11 +44,11 @@ typedef struct s_env
 	atomic_int					dieded;
 	atomic_int					all_ate;
 	atomic_llong				start_timestamp;
-	pthread_mutex_t		eat_die;
-	pthread_mutex_t		forks[300];
-	pthread_mutex_t		writing;
-	t_philo				philo[300];
-}						t_env;
+	pthread_mutex_t				eat_die;
+	pthread_mutex_t				forks[300];
+	pthread_mutex_t				writing;
+	t_philo						philo[300];
+}								t_env;
 
 int						ft_atoi(const char *str);
 void					action_print(t_env *env, int id, char *string);
@@ -56,6 +56,7 @@ long long				timestamp(void);
 void					start(t_env *env);
 //void					end(t_env *env, t_philo *philos);
 void					end(t_env *env);
-void					sleepers(long long duration_time, long long start_time, t_env *env);
+void					sleepers(long long duration_time,
+							long long start_time, t_env *env);
 
 #endif

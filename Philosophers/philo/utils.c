@@ -6,7 +6,7 @@
 /*   By: kabdenou <kabdenou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 10:26:48 by kabdenou          #+#    #+#             */
-/*   Updated: 2022/09/18 12:30:31 by kabdenou         ###   ########.fr       */
+/*   Updated: 2022/09/29 10:14:15 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	action_print(t_env *env, int id, char *string)
 	return ;
 }
 
-void		sleepers(long long duration_time, long long start_time, t_env *env)
+void	sleepers(long long duration_time, long long start_time, t_env *env)
 {
 	while (!(env->dieded))
 	{
