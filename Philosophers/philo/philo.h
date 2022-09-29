@@ -19,30 +19,31 @@
 # include <stdlib.h>
 # include <string.h>
 # include <pthread.h>
+# include <stdatomic.h>
 
 struct	s_env;
 
 typedef struct s_philo
 {
-	int					id;
-	int					ate;
-	int					left_fork_id;
-	int					right_fork_id;
-	long long			t_last_meal;
+	atomic_int					id;
+	atomic_int					ate;
+	atomic_int					left_fork_id;
+	atomic_int					right_fork_id;
+	atomic_llong				t_last_meal;
 	struct s_env		*env;
 	pthread_t			thread_num;
 }						t_philo;
 
 typedef struct s_env
 {
-	int					nb_philo;
-	int					time_death;
-	int					time_eat;
-	int					time_sleep;
-	int					nb_eat;
-	int					dieded;
-	int					all_ate;
-	long long			start_timestamp;
+	atomic_int					nb_philo;
+	atomic_int					time_death;
+	atomic_int					time_eat;
+	atomic_int					time_sleep;
+	atomic_int					nb_eat;
+	atomic_int					dieded;
+	atomic_int					all_ate;
+	atomic_llong				start_timestamp;
 	pthread_mutex_t		eat_die;
 	pthread_mutex_t		forks[300];
 	pthread_mutex_t		writing;
