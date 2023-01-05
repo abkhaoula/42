@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Account.cpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kabdenou <kabdenou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/05 12:06:29 by kabdenou          #+#    #+#             */
+/*   Updated: 2023/01/05 12:06:30 by kabdenou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Account.hpp"
 #include <iostream>
 #include <sstream>
 #include <ctime>
-#include <iomanip>
 
 int Account::_nbAccounts = 0;
 int Account::_totalNbDeposits = 0;

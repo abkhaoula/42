@@ -1,12 +1,25 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: kabdenou <kabdenou@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/01/05 12:06:11 by kabdenou          #+#    #+#              #
+#    Updated: 2023/01/05 12:06:12 by kabdenou         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME		=phonebook
 CC			=c++
-CFLAGS		=-Wall -Wextra -Werror -std=c++98
+CFLAGS		=-Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
 RM			=rm -f
-SRC			= phoneBook.cpp
+SRC			= phoneBook.cpp main.cpp
+HEADERS		= ./phoneBook.hpp
 
 
-$(NAME):	$(SRC)
-				$(CC) -o $@ -c $? $(CFLAGS)
+$(NAME):	$(SRC) $(HEADERS)
+				$(CC) $(CFLAGS) $(SRC) -o   $(NAME)
 
 all:		$(NAME)
 

@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   megaphone.cpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kabdenou <kabdenou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/05 12:06:01 by kabdenou          #+#    #+#             */
+/*   Updated: 2023/01/05 12:06:02 by kabdenou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <iostream>
 #include <cstring>
-#include <cctype>
 
 int main(int argc, char* argv[]) {
   // Check if at least one argument was passed
