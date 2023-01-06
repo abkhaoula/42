@@ -4,11 +4,11 @@ CFLAGS		=-Wall -Wextra -Werror -std=c++98 -std=c++98
 RM			=rm -f
 SRC			=main.cpp
 
+all:		$(NAME)
 
 $(NAME):	$(SRC)
 				$(CC) -o $@ $? $(CFLAGS)
 
-all:		$(NAME)
 
 fclean: 	
 				$(RM) $(NAME)
