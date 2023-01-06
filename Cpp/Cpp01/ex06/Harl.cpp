@@ -3,10 +3,15 @@
 #include "Harl.hpp"
 
 Harl::Harl() {
-    levels["DEBUG"] = &Harl::debug;
-    levels["INFO"] = &Harl::info;
-    levels["WARNING"] = &Harl::warning;
-    levels["ERROR"] = &Harl::error;
+
+    lvl[0].l = "DEBUG";
+    lvl[0].f = &Harl::debug;
+    lvl[1].l = "INFO";
+    lvl[1].f = &Harl::info;
+    lvl[2].l = "WARNING";
+    lvl[2].f = &Harl::warning;
+    lvl[3].l = "ERROR";
+    lvl[3].f = &Harl::error;
 }
 Harl::~Harl() {}
 void Harl::debug( void ) {
@@ -27,6 +32,10 @@ void Harl::complain( std::string level ) {
         std::cout << "Not a valid level !";
         return ;
     }
-    (this->*levels[level])();
-    //(*levels[level])();
+    for (int i = 0; i < 4; i++)
+    {
+        if (level == (lvl[i].l))
+            (this->*lvl[i].f)();
+    }
+    
 }

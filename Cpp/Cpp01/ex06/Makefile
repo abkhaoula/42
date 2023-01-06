@@ -3,10 +3,12 @@ CC			=c++
 CFLAGS		=-Wall -Wextra -Werror -std=c++98 
 RM			=rm -f
 SRC			= Harl.cpp main.cpp
+HEADERS		= Harl.hpp
 
+all:		$(NAME)
 
-$(NAME):	$(SRC)
-				$(CC) -o $@ $? $(CFLAGS)
+$(NAME):	$(SRC) $(HEADERS)
+				$(CC) $(CFLAGS) $(SRC) -o   $(NAME)
 
 all:		$(NAME)
 
