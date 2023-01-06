@@ -7,7 +7,7 @@ SRC			=main.cpp
 all:		$(NAME)
 
 $(NAME):	$(SRC)
-				$(CC) -o $@ $? $(CFLAGS)
+				$(CC) $(CFLAGS) $(SRC) -o   $(NAME)
 
 
 fclean: 	
