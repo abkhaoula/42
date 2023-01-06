@@ -6,7 +6,7 @@
 /*   By: kabdenou <kabdenou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 12:06:13 by kabdenou          #+#    #+#             */
-/*   Updated: 2023/01/05 12:06:14 by kabdenou         ###   ########.fr       */
+/*   Updated: 2023/01/06 13:52:54 by kabdenou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,10 +158,8 @@ void PhoneBook::add() {
 }
 void PhoneBook::search() {
     std::cout << "|     Index|First Name| Last Name|  Nickname|" << std::endl;
-    std::cout << "|----------|----------|----------|----------|" << std::endl;
     for (int i = 0; i < _last; i++)
     {
-                
         std::cout << "|----------|----------|----------|----------|" << std::endl;
         _contacts[i]->print(i+1);
     }
@@ -174,7 +172,11 @@ void PhoneBook::search() {
         std::cout << "Index should be a positive number between 1 and 8!" << std::endl;
         exit (0);
     }
-    if ((index.length() != 1) or (index[0] < '1') or (index[0] > '8'))
+    std::string last;
+    std::stringstream ss;
+    ss << _last;
+    last = ss.str();
+    if ((index.length() != 1) or (index[0] < '1') or (index[0] > last[0]))
     {
         std::cout << "Index should be a positive number between 1 and 8!" << std::endl;
         return;
