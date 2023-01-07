@@ -13,6 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <string>
 
 int main(int argc, char* argv[]) {
 	if (argc != 4)
@@ -34,15 +35,44 @@ int main(int argc, char* argv[]) {
 	}
 
 	std::string line;
+	std::string rline;
 
-	while (std::getline(file, line)) {
-    	size_t pos = 0;
-		while ((pos = line.find(argv[2], pos)) != std::string::npos) {
-			line.replace(pos, std::strlen(argv[2]), argv[3]);
-			pos += std::strlen(argv[3]);
-    	}
-		file_replace << line << std::endl;
+	line = "";
+	while (std::getline(file, rline)) {
+		line = line + rline;
+		line = line + "\n";
 	}
+	line.erase(line.length() - 1, 1);
+
+	//std::cout << "line comming :"<< std::endl << std::endl;
+	//std::cout << line << std::endl << "--------------------------" << std::endl;
+	//return 0;
+
+
+    size_t pos = 0;
+    while ((pos = line.find(argv[2], pos)) != std::string::npos) {
+    	line.insert(pos, argv[3]);
+      	line.erase(pos + strlen(argv[3]), strlen(argv[2]));
+      	pos += strlen(argv[3]);
+	}
+
+    file_replace << line;
+
+
+
+
+
+	//while (std::getline(file, line)) {
+	//	file_replace << '\n';
+    //	size_t pos = 0;
+    //	while ((pos = line.find(argv[2], pos)) != std::string::npos) {
+    //  		line.insert(pos, argv[3]);
+    //  		line.erase(pos + strlen(argv[3]), strlen(argv[2]));
+    //  		pos += strlen(argv[3]);
+	//	}
+
+    //	file_replace << line;
+	//}
 
 	return (0);
 }
