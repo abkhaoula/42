@@ -18,6 +18,6 @@ int main() {
     //z->announce();
     //delete z;
     //randomChump( "randomly Alive" );
-    Zombie *zombie = zombieHorde( 3, "Hordly Alize" );
+    Zombie *zombie = zombieHorde( -3, "Hordly Alize" );
     delete [] zombie;
 }
