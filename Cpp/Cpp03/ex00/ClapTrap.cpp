@@ -16,7 +16,7 @@ ClapTrap& ClapTrap::operator=(const ClapTrap& p) {
     this->_hit_points = p._hit_points;
     this->_energy_points = p._energy_points;
     this->_attack_damage = p._attack_damage;
-    std::cout << "is now " << _name << std::endl;
+    std::cout << " is now " << _name << std::endl;
 
     return (*this);
 }
