@@ -12,11 +12,14 @@ ScavTrap::~ScavTrap() {
     std::cout << "ScavTrap " << _name << ": destroyed;" << std::endl;
 }
 
-ScavTrap::ScavTrap(const ClapTrap& p) {
-    *this = p;
+ScavTrap::ScavTrap(const ScavTrap& p) : ClapTrap(p){
+    std::cout << "ScavTrap " << _name << ": created;" << std::endl;
 }
+
 ScavTrap& ScavTrap::operator=(const ScavTrap& p) {
-    *this = p;
+    std::string tmp = _name;
+    ClapTrap::operator=(p);
+    std::cout << "ScavTrap " << _name << " is now " << _name << std::endl;
     return (*this);
 }
 
