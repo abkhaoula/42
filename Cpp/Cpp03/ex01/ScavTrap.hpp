@@ -10,6 +10,7 @@ class ScavTrap:ClapTrap {
         ~ScavTrap();
         ScavTrap(const ClapTrap& p);
         ScavTrap& operator=(const ScavTrap& p);
+        void attack(const std::string& target);
         void guardGate();
 };
 
