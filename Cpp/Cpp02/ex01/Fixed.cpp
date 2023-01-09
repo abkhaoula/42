@@ -32,7 +32,7 @@ void Fixed::setRawBits( int const raw ) {
 }
 
 float Fixed::toFloat( void ) const {
-    return static_cast<float>(value) / (1 << fractional_bits);
+    return (1.0 * value) / (1 << fractional_bits);
 }
 
 int Fixed::toInt( void ) const {
