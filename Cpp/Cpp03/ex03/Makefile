@@ -2,8 +2,8 @@ NAME		=a.out
 CC			=c++
 CFLAGS		=-Wall -Wextra -Werror -std=c++98 
 RM			=rm -f
-SRC			=main.cpp ClapTrap.cpp ScavTrap.cpp FragTrap.cpp
-HEADERS		=ClapTrap.hpp ScavTrap.hpp FragTrap.hpp
+SRC			=main.cpp ClapTrap.cpp ScavTrap.cpp FragTrap.cpp DiamondTrap.cpp 
+HEADERS		=ClapTrap.hpp ScavTrap.hpp FragTrap.hpp DiamondTrap.hpp 
 
 all:		$(NAME)
 
