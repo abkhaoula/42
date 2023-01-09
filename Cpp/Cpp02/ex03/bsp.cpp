@@ -16,6 +16,9 @@ bool bsp(Point a, Point b, Point c, Point point)
     if (area3 < Fixed(0))
         area3 = Fixed(0) - area3;
 
-
+    if ((area1 == Fixed(0)) or (area2 == Fixed(0)) or (area3 == Fixed(0)))
+    {
+        return (false);
+    }
     return ((area1 + area2 + area3) == area);
 }
