@@ -6,12 +6,12 @@
 int main( void )
 {
     DiamondTrap a( "A" );
-    DiamondTrap c( ash );
+    DiamondTrap c( a );
     DiamondTrap b("B");
 
     a.whoAmI();
     c.whoAmI();
-    b = ash;
+    b = a;
     b.whoAmI();
 
     a.attack( "D" );
