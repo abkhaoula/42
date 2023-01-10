@@ -4,14 +4,21 @@ CFLAGS		=-Wall -Wextra -Werror -std=c++98
 RM			=rm -f
 SRC			=main.cpp ClapTrap.cpp
 HEADERS		=ClapTrap.hpp
+OBJ = $(SRC:.cpp=.o)
 
 all:		$(NAME)
 
-$(NAME):	$(SRC) $(HEADERS)
-				$(CC) $(CFLAGS) $(SRC) -o   $(NAME)
+$(NAME):	$(SRC) $(OBJ) $(HEADERS)
+				@$(CC) $(CFLAGS) $(OBJ) -o   $(NAME)
 
-fclean: 	
-				$(RM) $(NAME)
+%.o: %.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	@$(RM) $(OBJ)
+
+fclean: clean
+				@$(RM) $(NAME)
 
 re: 		fclean all
 
