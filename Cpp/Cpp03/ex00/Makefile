@@ -1,4 +1,4 @@
-NAME		=a.out
+NAME		=clap
 CC			=c++
 CFLAGS		=-Wall -Wextra -Werror -std=c++98 
 RM			=rm -f
