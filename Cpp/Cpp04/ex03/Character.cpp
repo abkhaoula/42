@@ -36,7 +36,12 @@ std::string const & Character::getName() const {
 void Character::equip(AMateria* m) {
     for (int i = 0; i < 4; i++) {
         if (!inventory[i]) {
-            inventory[i] = m;
+            inventory[i] = m->clone();
+            break;
+        }
+        else if (inventory[i]->getType() == "") {
+            delete inventory[i];
+            inventory[i] = m->clone();
             break;
         }
     }
@@ -44,7 +49,7 @@ void Character::equip(AMateria* m) {
         
 void Character::unequip(int idx) {
     if (idx >= 0 && idx < 4 && inventory[idx]) {
-        delete inventory[idx];
+        inventory[idx]->setType("");
     }
 }
         

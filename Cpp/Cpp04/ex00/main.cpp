@@ -12,15 +12,20 @@ const Animal* j = new Dog();
 const Animal* i = new Cat();
 std::cout << j->getType() << " " << std::endl;
 std::cout << i->getType() << " " << std::endl;
-i->makeSound(); //will output the cat sound!
+i->makeSound();
 j->makeSound();
 meta->makeSound();
+delete meta;
+delete j;
+delete i;
 std::cout << "--------------------------------------------" << std::endl;
 const WrongAnimal* Wrongmeta = new WrongAnimal();
 const WrongAnimal* Wrongi = new WrongCat();
 std::cout << Wrongi->getType() << " " << std::endl;
-Wrongi->makeSound(); //will output the cat sound!
+Wrongi->makeSound();
 Wrongmeta->makeSound();
+delete Wrongmeta;
+delete Wrongi;
 std::cout << "--------------------------------------------" << std::endl;
 return 0;
 }

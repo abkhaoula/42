@@ -5,6 +5,8 @@
 #include <iostream>
 #include "ICharacter.hpp"
 
+class ICharacter;
+
 class AMateria
 {
 protected:
@@ -16,7 +18,8 @@ public:
     AMateria(const AMateria& am);
     AMateria& operator=(const AMateria& am);
     virtual ~AMateria();
-    std::string const & getType() const; //Returns the materia type
+    std::string const & getType() const;
+    void setType(std::string newType);
     virtual AMateria* clone() const = 0;
     virtual void use(ICharacter& target);
 };

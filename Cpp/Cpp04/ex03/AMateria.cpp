@@ -11,6 +11,9 @@ AMateria::~AMateria(){}
 std::string const& AMateria::getType() const{
     return (type);
 }
+void AMateria::setType(std::string newType) {
+    type = newType;
+}
 void AMateria::use(ICharacter& target){
-    std::cout << "AMateria(" << type << "): is being used;" << std::endl;
+    std::cout << "AMateria(" << target.getName() << "): is being used;" << std::endl;
 }
