@@ -7,7 +7,6 @@ class Cure : public AMateria
 {
 public:
     Cure();
-    //Ice(std::string const & type);
     Cure(const Cure& c);
     Cure& operator=(const Cure& c);
     virtual ~Cure();
