@@ -36,12 +36,12 @@ std::string const & Character::getName() const {
 void Character::equip(AMateria* m) {
     for (int i = 0; i < 4; i++) {
         if (!inventory[i]) {
-            inventory[i] = m->clone();
+            inventory[i] = m;
             break;
         }
         else if (inventory[i]->getType() == "") {
             delete inventory[i];
-            inventory[i] = m->clone();
+            inventory[i] = m;
             break;
         }
     }
