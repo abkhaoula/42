@@ -7,10 +7,13 @@ Dog::Dog(){
     std::cout << "Dog(" << type << "): default constructor called;" << std::endl;
 }
 Dog::Dog(const Dog& d){
+    TheBrain = new Brain();
+    *(this->TheBrain) = *(d.TheBrain);
     type = d.type;
     std::cout << "Dog(" << type << "): copy constructor called;" << std::endl;
 }
 Dog& Dog::operator=(const Dog& d) {
+    *(this->TheBrain) = *(d.TheBrain);
     this->type = d.type;
     std::cout << "Dog(" << type << "): copy assignement opperator constructor called;" << std::endl;
     return (*this);
