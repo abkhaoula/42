@@ -4,7 +4,7 @@
 #include "Cure.hpp"
 #include "Character.hpp"
 
-int main()
+void    ft()
 {
 IMateriaSource* src = new MateriaSource();
 src->learnMateria(new Ice());
@@ -15,11 +15,29 @@ tmp = src->createMateria("ice");
 me->equip(tmp);
 tmp = src->createMateria("cure");
 me->equip(tmp);
+tmp = src->createMateria("ice");
+me->equip(tmp);
+tmp = src->createMateria("cure");
+me->equip(tmp);
+tmp = src->createMateria("cure");
+me->equip(tmp);
 ICharacter* bob = new Character("bob");
 me->use(0, *bob);
 me->use(1, *bob);
 delete bob;
+delete tmp;
 delete me;
 delete src;
+return ;
+}
+
+void l() {
+    system("leaks a.out");
+}
+
+int main()
+{
+    ft();
+    l();
 return 0;
 }
