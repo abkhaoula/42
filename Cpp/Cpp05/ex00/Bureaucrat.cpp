@@ -14,14 +14,13 @@ Bureaucrat::Bureaucrat(std::string n, int g) : _name (n){
     _grade = g;
 }
 
-Bureaucrat::Bureaucrat(const Bureaucrat& b){
+Bureaucrat::Bureaucrat(const Bureaucrat& b) : _name (b._name){
     if (b._grade < 1) {
         throw Bureaucrat::GradeTooHighException();
     }
     if (b._grade > 150) {
         throw Bureaucrat::GradeTooLowException();
     }
-    _name = b._name;
     _grade = b._grade;
 }
 
@@ -30,7 +29,7 @@ Bureaucrat& Bureaucrat::operator=(const Bureaucrat& b) {
         throw Bureaucrat::GradeTooHighException();
     if (b._grade > 150) 
         throw Bureaucrat::GradeTooLowException();
-    _name = b._name;
+    //_name = b._name;//check1
     _grade = b._grade;
     return (*this);
 }
@@ -48,14 +47,14 @@ int Bureaucrat::getGrade ( void ) const {
 }
 
 void Bureaucrat::incrementGrade( void ) {
-    if (_grade == 1)
+    if (_grade <= 1)
         throw Bureaucrat::GradeTooHighException();
     _grade--;
     
 }
 
 void Bureaucrat::decrementGrade( void ) {
-    if (_grade == 150)
+    if (_grade >= 150)
         throw Bureaucrat::GradeTooLowException();
     _grade++;
 }
