@@ -61,9 +61,9 @@ void Bureaucrat::decrementGrade( void ) {
 
 void Bureaucrat::signForm(Form& f) const{
     if (f.getRequiredGrade() < 1)
-        throw Bureaucrat::GradeTooHighException();
+        throw Form::GradeTooHighException();
     if (f.getRequiredGrade() > 150) 
-        throw Bureaucrat::GradeTooLowException();
+        throw Form::GradeTooLowException();
     if (f.getRequiredGrade() < _grade) {
         std::cout << _name << " couldn't signe " << f.getName() << " because her/his grade is not high enough." << std::endl;
         return ;
