@@ -52,3 +52,24 @@ std::ostream& operator<<(std::ostream& out, const Form& f);
 
 
 #endif
+#include "Intern.hpp"
+
+
+Intern::Intern() {}
+Intern::Intern(const Intern& i) {}
+Form* Intern::makeForm(std::string formName, std::string targetName) const {
+    std::string formNames[] = {"robotomy request", "presidential pardon", "shrubbery creation"};
+    Form*    forms[] = { new RobotomyRequestForm( target ), new PresidentialPardonForm( target ), new ShrubberyCreationForm( target )};
+    for ( int i = 0; i < 3; i++ ) {
+        if ( name == formNames[i] ) {
+            std::cout << "Intern creates " << name << std::endl;
+            return forms[i];
+        }
+    }
+    std::cout << "Intern cannot create " << name << " form" << std::endl;
+    return nullptr;
+}
+Intern& Intern::operator=(const Intern& i) {
+    return ( *this );
+}
+Intern::~Intern() {}
