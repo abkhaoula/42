@@ -1,4 +1,4 @@
-NAME		= serialization
+NAME		= identify
 CC			=c++
 CFLAGS		=-Wall -Wextra -Werror
 RM			=rm -f
