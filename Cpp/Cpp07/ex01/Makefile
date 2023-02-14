@@ -1,9 +1,9 @@
-NAME            = SwapMinMax
+NAME            = iter
 CC				=c++
 CFLAGS			=-Wall -Wextra -Werror -std=c++98
 RM				=rm -f
 SRC             = main.cpp
-HEADERS         = whatever.hpp
+HEADERS         = iter.hpp
 OBJ = $(SRC:.cpp=.o)
 
 all:		$(NAME)
