@@ -5,6 +5,7 @@
 #include "C.hpp"
 
 Base * generate() {
+    srand(time(0));
     int choice = rand() % 3;
     if (choice == 0) return new A;
     if (choice == 1) return new B;
@@ -21,8 +22,36 @@ void identify(Base *p) {
     }
 }
 
-void identify(Base &p) {
-    identify(&p);
+void    identify(Base& p)
+{
+    try
+    {
+        A &a = dynamic_cast<A&>(p);
+        (void)a;
+        std::cout << "A" << std::endl;
+    }
+    catch (std::exception &e)
+    {
+        try
+        {
+            B &b = dynamic_cast<B&>(p);
+            (void)b;
+            std::cout << "B" << std::endl;
+        }
+        catch (std::exception &e)
+        {
+            try
+            {
+                C &c = dynamic_cast<C&>(p);
+                (void)c;
+                std::cout << "C" << std::endl;
+            }
+            catch (std::exception &e)
+            {
+                std::cout << "Unknown" << std::endl;
+            }
+        }
+    }
 }
 
 int main(void)
