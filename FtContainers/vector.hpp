@@ -2,6 +2,7 @@
 # define VECTOR_HPP
 
 #include <memory>
+#include <stdexcept>
 #include "iterator.hpp"
 #include "reverse_iterator.hpp"
 
@@ -53,45 +54,66 @@ namespace ft {
 			//
 
 
+			///CONSTRUCTOR///
 			//
-			vector(): _alloc(allocator_type()), _capacity(0) {}
-			explicit vector( const Allocator& alloc ): _alloc(alloc), _capacity(0) { } // = Allocator()
-			explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator()): _alloc(alloc), _capacity(count) {
+			vector(): _alloc(allocator_type()), _capacity(0), _size(0), _data(NULL) {}
+			//
+			explicit vector( const Allocator& alloc ): _alloc(alloc), _capacity(0), _size(0), _data(NULL) {}
+			//
+			explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator()): _alloc(alloc), _capacity(count), _size(count), _data(NULL)
+			{
+				if (_capacity > max_size())
+					throw std::runtime_error("allocation capacity exceeded");
 				_data = _alloc.allocate(_capacity);
-				for (size_type i = 0; i < _capacity; ++i) {
+				for (size_type i = 0; i < _size; ++i) {
             		_alloc.construct(_data + i, value);
         		}
 			}
-
+			//
 			template< class InputIt >
-			vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() ){ // typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = u_nullptr
-				difference_type num_elements = std::distance(first, last);
-				_data = alloc.allocate(num_elements);
-				std::copy(first, last, _data);
-        		_capacity = num_elements;
-			}
+			vector( InputIt first, InputIt last, const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0 ) : _alloc(alloc)
+			{ 
+				_size = std::distance(first, last);
+				if (_size > max_size())
+					throw std::runtime_error("allocation capacity exceeded");
+				_data = alloc.allocate(_size);
+        		_capacity = _size;
 
-			vector( const vector& other ): _alloc(other._alloc), _capacity(other._capacity)
+				for (size_type i = 0; i < _size; i++)
+				{
+					_alloc.construct(_data + i, *first);
+					first++;
+				}
+			}
+			//
+			vector( const vector& other ): _alloc(other._alloc), _capacity(other._capacity), _size(other._size), _data(NULL)
     		{
         		_data = _alloc.allocate(_capacity);
         		for (size_type i = 0; i < _capacity; ++i) {
             		_alloc.construct(_data + i, other._data[i]);
         		}
     		}
+			///END_CONSTRUCTOR///
 
+			///DESTRUCTOR///
 			//
-			~vector() {
-				//clear();
+			~vector()
+			{
+				clear();
         		_alloc.deallocate(_data, _capacity);
 			}
+			///END_DESTRUCTOR///
 
+			///OPERATOR///
 			//
-			vector& operator=( const vector& other ) {
+			vector& operator=( const vector& other )
+			{
 				if (this != &other) {
             		//clear();
             		_alloc.deallocate(_data, _capacity);
             		_alloc = other._alloc;
             		_capacity = other._capacity;
+					_size = other._size;
             		_data = _alloc.allocate(_capacity);
             		for (size_type i = 0; i < _capacity; ++i) {
                 		_alloc.construct(_data + i, other._data[i]);
@@ -99,10 +121,15 @@ namespace ft {
         		}
         		return *this;
 			}
+			///END_OPERATOR///
 
+			///ASSIGN///
 			//
 			void assign(size_type count, const T& value)
 			{
+				if (count > max_size())
+					throw std::runtime_error("allocation capacity exceeded");
+				clear();
 				if (count > _capacity) {
 					T* new_data = _alloc.allocate(count);
 					_alloc.deallocate(_data, _capacity);
@@ -110,119 +137,312 @@ namespace ft {
 					_capacity = count;
 				}
 
-    			_capacity = count;
-
     			for (size_type i = 0; i < _capacity; i++) {
-        			_data[i] = value;
+        			_alloc.construct(_data + i, value);
     			}
+				_size = count;
 			}
 
-			
+			//
 			template< class InputIt >
-			void assign( InputIt first, InputIt last ) {
-				difference_type num_elements = std::distance(first, last);
+			void assign( InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0) {
+				size_type num_elements = std::distance(first, last);
+				if (num_elements > max_size())
+					throw std::runtime_error("allocation capacity exceeded");
 				if (num_elements > _capacity) {
 					T* new_data = _alloc.allocate(num_elements);
 					_alloc.deallocate(_data, _capacity);
 					_data = new_data;
 					_capacity = num_elements;
     			}
-    			else if (num_elements <= _capacity) {
-        			std::copy(first, last, _data);
-        			_capacity = num_elements;
+				
+    			for (size_type i = 0; i < _capacity; i++) {
+        			_alloc.construct(_data + i, *first);
+					first++;
     			}
-    			else {
-        			std::copy(first, first + _capacity, _data);
-        			std::fill(_data + _capacity, _data + num_elements, *(last - 1));
-        			_capacity = num_elements;
-    			}
+				_size = num_elements;
 			}	
+			///END_ASSIGN///
+			
+			///GETTER///
+			//
+			allocator_type get_allocator() const
+			{
+				return _alloc;
+			};
+			//
+			reference at( size_type pos )
+			{
+				if (pos < _size) 
+					return _data[pos];
+				throw std::runtime_error("out ranged element");
+			};
+			//
+			const_reference at( size_type pos ) const
+			{
+				if (pos < _size) 
+					return _data[pos];
+				throw std::runtime_error("out ranged element");
+			}
+			//
+			reference operator[]( size_type pos )
+			{
+				return _data[pos];
+			}
+			const_reference operator[]( size_type pos ) const
+			{
+				return _data[pos];
+			}
+			//
+			reference front()
+			{
+				return _data[0];
+			}
+			//
+			const_reference front() const
+			{
+				return _data[0];
+			}
+			//
+			reference back()
+			{
+				return _data[_size-1];
+			}
+			//
+			const_reference back() const
+			{
+				return _data[_size-1];
+			}
+			//
+			T* data()
+			{
+				return _data;
+			}
+			//
+			const T* data() const
+			{
+				return _data;
+			}
+			//
+			iterator begin()
+			{
+				return iterator(_data); 
+			}
+			//
+			const_iterator begin() const
+			{
+				return const_iterator(_data); 
+			}
+			//
+			iterator end()
+			{
+				return iterator(_data + _size);
+			}
+			//
+			const_iterator end() const
+			{
+				return const_iterator(_data + _size);
+			}
+			//
+			reverse_iterator rbegin()
+			{
+				return reverse_iterator(end());
+			}
+			//
+			const_reverse_iterator rbegin() const
+			{
+				return const_reverse_iterator(end());
+			}
+			//
+			reverse_iterator rend()
+			{
+				return reverse_iterator(begin());
+			}
+			//
+			const_reverse_iterator rend() const
+			{
+				return const_reverse_iterator(begin());
+			}
+			//
+			bool empty() const
+			{
+				return ( _size == 0 ); 
+			}
+			//
+			size_type size() const
+			{
+				return _size;
+			}
+			//
+			size_type max_size() const
+			{
+				return _alloc.max_size();
+			}
+			//
+			size_type capacity() const
+			{
+				return _capacity;
+			}
+			///END_GETTER///
+			
+		
+			
 
 			
 
-			// //
-			// allocator_type get_allocator() const;
+			///ALLOC_OP///
+			//
+			template< class InputIt >
+        	void reserve( size_type new_cap )
+			{
+				if (new_cap <= _capacity)
+					return ;
+				if (new_cap > max_size())
+					throw std::runtime_error("allocation capacity exceeded");
+				T	*new_data = _alloc.allocate(new_cap);
+				for (size_type i = 0; i < _size; i++)
+				{
+					_alloc.construct(&new_data[i], _data[i]);
+					_alloc.destroy(&_data[i]);
+				}
+				_alloc.deallocate(_data, _capacity);
+				_data = new_data;
+				_capacity = new_cap;
+			}
+			//
+			iterator erase( iterator pos )
+			{
+				size_type index = pos - begin();
 
-			// //
-			// reference at( size_type pos );
-			// const_reference at( size_type pos ) const;
+				_size --;
+				_alloc.destroy(&_data[index]);
+				for (size_type i = index; i < _size; i++)
+				{
+					_alloc.construct(&_data[i], _data[i + 1]);
+					_alloc.destroy(&_data[i + 1]);
+				}
+				return iterator(&_data[index]);
+			}
+        	//
+			iterator erase( iterator first, iterator last )
+			{
+				size_type l = last - first;
 
-			// //
-			// reference operator[]( size_type pos );
-			// const_reference operator[]( size_type pos ) const;
+				while (first != end() - l)
+				{
+					_alloc.construct(first, first[l]);
+					++first;
+				}
+				while (first != end())
+				{
+					_alloc.destroy(&(*first));
+					++first;
+				}
+				_size -= l;
+				return last - l;
+			}
+			//
+			void clear()
+			{
+				erase(begin(), end());
+			}
+        	//
+			iterator insert( const_iterator pos, size_type count, const T& value )
+			{
+				size_type i = pos - begin();
 
-			// //
-			// reference front();
-			// const_reference front() const;
+				if ((_size + count) > _capacity)
+					reserve(_size + count);
+				for (size_type j = count + _size - 1; j > i + count - 1; j--)
+				{
+					_alloc.construct(&_data[j], _data[j - count]);
+					_alloc.destroy(&_data[j - count]);
+				}
+				for (size_type k = i; k < i + count; k++)
+				{
+					_alloc.construct(&_data[k], value);
+					_size++;
+				}
+				return begin() + i;
+			}
+        	//
+			iterator insert( const_iterator pos, const T& value )
+			{
+				return (insert(pos, 1, value));
+			}
+        	//
+			template< class InputIt >
+        	iterator insert( const_iterator pos, InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
+			{
+				size_type	i = pos - begin();
+				size_type	l = std::distance(first, last);
 
-			// //
-			// reference back();
-			// const_reference back() const;
+				if ((_size + l) > _capacity)
+					reserve(_size + l);
+				for (size_type k = l + _size - 1; k > i + l - 1; k -= 1)
+				{
+					_alloc.construct(&_data[k], _data[k - l]);
+					_alloc.destroy(&_data[k - l]);
+				}
+				for (size_type l = i; l < i + l; l++)
+				{
+					_alloc.construct(&_data[l], *first);
+					first++;
+					_size++;
+				}
+				return begin() + i;
+			}
+			//
+			void push_back( const T& value )
+			{
+				if (_size == _capacity)
+					reserve(_size + 1);
+				_size++;
+				_alloc.construct(_data + _size - 1, value);
+			}
+			//
+			void pop_back()
+			{
+				_alloc.destroy(&_data[_size - 1]);
+				_size--;
+			}
+			//
+			void resize( size_type count, T value = T())
+			{
+				while (count < _size)
+					pop_back();
+				while (count > _size)
+					push_back(value);
+			}
+			//
+			void swap(vector& other)
+			{
+				size_type	tmp;
+				Allocator	tmp_a;
+				T*			tmp_d;
 
-			// //
-			// T* data();
-			// const T* data() const;
+				tmp_a = _alloc;
+				_alloc = other._alloc;
+				other._alloc = tmp_a;
 
-			// //
-			// iterator begin();
-			// const_iterator begin() const;
+				tmp = _capacity;
+				_capacity = other._capacity;
+				other._capacity = tmp;
 
-			// //
-			// iterator end();
-			// const_iterator end() const;
+				tmp = _size;
+				_size = other._size;
+				other._size = tmp;
 
-			// //
-			// reverse_iterator rbegin();
-			// const_reverse_iterator rbegin() const;
-
-			// //
-			// reverse_iterator rend();
-			// const_reverse_iterator rend() const;
-
-			// //
-			// bool empty() const;
-
-			// //
-			// size_type size() const;
-
-			// //
-			// size_type max_size() const;
-
-			// //
-			// template< class InputIt >
-        	// void reserve( size_type new_cap );
-
-			// //
-			// size_type capacity() const;
-
-			// //
-			// void clear();
-
-			// //
-        	// iterator insert( const_iterator pos, const T& value );
-        	// iterator insert( const_iterator pos, size_type count, const T& value );
-        	// template< class InputIt >
-        	// iterator insert( const_iterator pos, InputIt first, InputIt last );
-
-			// //
-			// iterator erase( iterator pos );
-        	// iterator erase( iterator first, iterator last );
-
-			// //
-			// void push_back( const T& value );
-
-			// //
-			// void pop_back();
-
-			// //
-			// void resize( size_type count, T value = T() );
-
-			// //
-			// void swap(vector& other);
+				tmp_d = _data;
+				_data = other._data;
+				other._data = tmp_d;
+			}
+			///END_ALLOC_OP///
 
         private :
 			Allocator	_alloc;
 			size_type	_capacity;
+			size_type	_size;
 			T*			_data;
 			
 
