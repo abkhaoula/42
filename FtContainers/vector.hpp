@@ -6,6 +6,7 @@
 #include "iterator.hpp"
 #include "reverse_iterator.hpp"
 #include "enable_if.hpp"
+#include "equal_compare.hpp"
 
 
 namespace ft {
