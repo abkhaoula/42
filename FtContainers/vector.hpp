@@ -1,4 +1,9 @@
+#ifndef VECTOR_HPP
+# define VECTOR_HPP
+
 #include <memory>
+#include "iterator.hpp"
+#include "reverse_iterator.hpp"
 
 
 namespace ft {
@@ -10,40 +15,40 @@ namespace ft {
         public :
 
             //
-            typedef T												value_type;
+            typedef T														value_type;
 
             //
-            typedef Allocator										allocator_type;
+            typedef Allocator												allocator_type;
 
             //
-            typedef typename allocator_type::size_type						size_type;
-
-			//
-			typedef std::ptrdiff_t							difference_type; //humm typename ft::iterator_traits<iterator>::difference_type
+            typedef size_t													size_type;
 
 			//
 			typedef typename allocator_type::reference 						reference;
 
 			//
-			typedef typename allocator_type::const_reference					const_reference; 
+			typedef typename allocator_type::const_reference				const_reference;
 
 			//
-			typedef typename Allocator::pointer								pointer;
+			typedef typename allocator_type::pointer						pointer;
 
 			//
-			typedef typename Allocator::const_pointer						const_pointer;
+			typedef typename allocator_type::const_pointer					const_pointer;
 
 			//
-			typedef T*												iterator; //humm ft::random_access_iterator<value_type>
+			typedef ft::iterator< T >										iterator;
 
 			//
-			typedef const T*										const_iterator; //humm ft::random_access_iterator<const value_type>
+			typedef ft::iterator< const T >									const_iterator;
 
 			//
-			typedef std::reverse_iterator<iterator>					reverse_iterator;
+			typedef typename iterator_traits<iterator>::difference_type		difference_type;
 
 			//
-			typedef std::reverse_iterator<const_iterator>			const_reverse_iterator;
+			typedef ft::reverse_iterator<iterator>							reverse_iterator;
+
+			//
+			typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 			//
 
@@ -70,22 +75,70 @@ namespace ft {
     		{
         		_data = _alloc.allocate(_capacity);
         		for (size_type i = 0; i < _capacity; ++i) {
-            		_alloc.construct(_data + i, other.m_data[i]);
+            		_alloc.construct(_data + i, other._data[i]);
         		}
     		}
 
 			//
 			~vector() {
-				clear();
+				//clear();
         		_alloc.deallocate(_data, _capacity);
 			}
 
 			//
-			// vector& operator=( const vector& other );
+			vector& operator=( const vector& other ) {
+				if (this != &other) {
+            		//clear();
+            		_alloc.deallocate(_data, _capacity);
+            		_alloc = other._alloc;
+            		_capacity = other._capacity;
+            		_data = _alloc.allocate(_capacity);
+            		for (size_type i = 0; i < _capacity; ++i) {
+                		_alloc.construct(_data + i, other._data[i]);
+            		}
+        		}
+        		return *this;
+			}
 
-			// //
-			// void assign( size_type count, const T& value );
-			// void assign( InputIt first, InputIt last );
+			//
+			void assign(size_type count, const T& value)
+			{
+				if (count > _capacity) {
+					T* new_data = _alloc.allocate(count);
+					_alloc.deallocate(_data, _capacity);
+					_data = new_data;
+					_capacity = count;
+				}
+
+    			_capacity = count;
+
+    			for (size_type i = 0; i < _capacity; i++) {
+        			_data[i] = value;
+    			}
+			}
+
+			
+			template< class InputIt >
+			void assign( InputIt first, InputIt last ) {
+				difference_type num_elements = std::distance(first, last);
+				if (num_elements > _capacity) {
+					T* new_data = _alloc.allocate(num_elements);
+					_alloc.deallocate(_data, _capacity);
+					_data = new_data;
+					_capacity = num_elements;
+    			}
+    			else if (num_elements <= _capacity) {
+        			std::copy(first, last, _data);
+        			_capacity = num_elements;
+    			}
+    			else {
+        			std::copy(first, first + _capacity, _data);
+        			std::fill(_data + _capacity, _data + num_elements, *(last - 1));
+        			_capacity = num_elements;
+    			}
+			}	
+
+			
 
 			// //
 			// allocator_type get_allocator() const;
@@ -214,3 +267,5 @@ namespace ft {
 
 
 }
+
+# endif
