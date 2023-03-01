@@ -36,7 +36,7 @@ namespace ft {
 			//
 			typedef ft::iterator< const T >									const_iterator;
 			//
-			typedef typename iterator_traits<iterator>::difference_type		difference_type;
+			typedef typename ft::iterator_traits<iterator>::difference_type		difference_type;
 			//
 			typedef ft::reverse_iterator<iterator>							reverse_iterator;
 			//
