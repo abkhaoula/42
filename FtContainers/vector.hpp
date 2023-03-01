@@ -145,14 +145,16 @@ namespace ft {
 				size_type num_elements = std::distance(first, last);
 				if (num_elements > max_size())
 					throw std::runtime_error("allocation capacity exceeded");
+				clear();
 				if (num_elements > _capacity) {
 					T* new_data = _alloc.allocate(num_elements);
-					_alloc.deallocate(_data, _capacity);
+					if(_data)
+						_alloc.deallocate(_data, _capacity);
 					_data = new_data;
 					_capacity = num_elements;
     			}
 				
-    			for (size_type i = 0; i < _capacity; i++) {
+    			for (size_type i = 0; i < num_elements; i++) {
         			_alloc.construct(_data + i, *first);
 					first++;
     			}
@@ -392,7 +394,20 @@ namespace ft {
 			void push_back( const T& value )
 			{
 				if (_size == _capacity)
-					reserve(_size + 1);
+				{
+					if (_size + 1 > max_size())
+						throw std::runtime_error("allocation capacity exceeded");
+					T	*new_data = _alloc.allocate(_size + 1);
+					for (size_type i = 0; i < _size; i++)
+					{
+						_alloc.construct(&new_data[i], _data[i]);
+						_alloc.destroy(&_data[i]);
+					}
+					if  (_data)
+						_alloc.deallocate(_data, _capacity);
+					_data = new_data;
+					_capacity = _size + 1 ;
+				}
 				_size++;
 				_alloc.construct(_data + _size - 1, value);
 			}
