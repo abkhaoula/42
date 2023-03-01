@@ -66,7 +66,7 @@ namespace ft {
 				_size = std::distance(first, last);
 				if (_size > max_size())
 					throw std::runtime_error("allocation capacity exceeded");
-				_data = alloc.allocate(_size);
+				_data = _alloc.allocate(_size);
         		_capacity = _size;
 
 				for (size_type i = 0; i < _size; i++)
@@ -102,12 +102,14 @@ namespace ft {
 			vector& operator=( const vector& other )
 			{
 				if (this != &other) {
-            		//clear();
-            		_alloc.deallocate(_data, _capacity);
+            		clear();
+					if(_data)
+            			_alloc.deallocate(_data, _capacity);
             		_alloc = other._alloc;
             		_capacity = other._capacity;
 					_size = other._size;
-            		_data = _alloc.allocate(_capacity);
+					if(_capacity)
+            			_data = _alloc.allocate(_capacity);
             		for (size_type i = 0; i < _capacity; ++i) {
                 		_alloc.construct(_data + i, other._data[i]);
             		}
