@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <stdexcept>
+#include <iostream>
 #include "iterator.hpp"
 #include "reverse_iterator.hpp"
 #include "enable_if.hpp"
@@ -130,7 +131,7 @@ namespace ft {
 					_capacity = count;
 				}
 
-    			for (size_type i = 0; i < _capacity; i++) {
+    			for (size_type i = 0; i < count; i++) {
         			_alloc.construct(_data + i, value);
     			}
 				_size = count;
