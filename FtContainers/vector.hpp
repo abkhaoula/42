@@ -11,7 +11,7 @@
 
 namespace ft {
 
-    template<class T, class Allocator = std::allocator<T>>
+    template< class T, class Allocator = std::allocator<T> >
 
     class vector
     {
@@ -88,8 +88,11 @@ namespace ft {
 			//
 			~vector()
 			{
-				clear();
-        		_alloc.deallocate(_data, _capacity);
+				if (_capacity)
+				{
+					clear();
+					_alloc.deallocate(_data, _capacity);
+				}
 			}
 			///END_DESTRUCTOR///
 
@@ -121,7 +124,8 @@ namespace ft {
 				clear();
 				if (count > _capacity) {
 					T* new_data = _alloc.allocate(count);
-					_alloc.deallocate(_data, _capacity);
+					if (_data)
+						_alloc.deallocate(_data, _capacity);
 					_data = new_data;
 					_capacity = count;
 				}
@@ -319,7 +323,7 @@ namespace ft {
 
 				while (first != end() - l)
 				{
-					_alloc.construct(first, first[l]);
+					(*first) = *(first + l);
 					++first;
 				}
 				while (first != end())
