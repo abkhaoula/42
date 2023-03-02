@@ -63,7 +63,7 @@ namespace ft {
 			template< class InputIt >
 			vector( InputIt first, InputIt last, const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0 ) : _alloc(alloc)
 			{ 
-				_size = std::distance(first, last);
+				_size = fr::distance(first, last);
 				if (_size > max_size())
 					throw std::runtime_error("allocation capacity exceeded");
 				_data = _alloc.allocate(_size);
@@ -362,7 +362,7 @@ namespace ft {
         	iterator insert( const_iterator pos, InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
 			{
 				size_type	i = pos - begin();
-				size_type	l = std::distance(first, last);
+				size_type	l = ft::distance(first, last);
 
 				if ((_size + l) > _capacity)
 					reserve(_size + l);
