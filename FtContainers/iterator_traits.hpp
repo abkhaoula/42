@@ -1,6 +1,8 @@
 #ifndef ITERATOR_TRAITS_HPP
 # define ITERATOR_TRAITS_HPP
 
+#include "enable_if.hpp"
+
 	namespace ft {
 		template < class iterator >
 		struct iterator_traits
@@ -31,6 +33,19 @@
 			typedef const T&								reference;
 			typedef std::random_access_iterator_tag			iterator_category;
 		};
+
+		template<typename InputIt>
+		typename iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
+		{
+			typename iterator_traits<InputIt>::difference_type n = 0;
+
+			while ((first + n) != last)
+			{
+				n++;
+				first++;
+			}
+			return n;
+		}
 	}
 
 # endif
