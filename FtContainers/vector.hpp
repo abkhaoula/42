@@ -368,23 +368,14 @@ namespace ft {
 			template< class InputIt >
         	iterator insert( const_iterator pos, InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
 			{
-				size_type	i = pos - begin();
-				size_type	l = std::distance(first, last);
-
-				if ((_size + l) > _capacity)
-					reserve(_size + l);
-				for (size_type k = l + _size - 1; k > i + l - 1; k -= 1)
-				{
-					_alloc.construct(&_data[k], _data[k - l]);
-					_alloc.destroy(&_data[k - l]);
-				}
-				for (size_type l = i; l < i + l; l++)
-				{
-					_alloc.construct(&_data[l], *first);
-					first++;
-					_size++;
-				}
-				return begin() + i;
+				difference_type offset = pos - begin();
+    
+    			for (; first != last; ++first) {
+        			insert(begin() + offset, *first);
+        		++offset;
+    			}
+    
+    			return begin() + offset;
 			}
 			//
 			void push_back( const T& value )
