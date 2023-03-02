@@ -142,23 +142,12 @@ namespace ft {
 			//
 			template< class InputIt >
 			void assign( InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0) {
-				size_type num_elements = std::distance(first, last);
-				if (num_elements > max_size())
-					throw std::runtime_error("allocation capacity exceeded");
 				clear();
-				if (num_elements > _capacity) {
-					T* new_data = _alloc.allocate(num_elements);
-					if(_data)
-						_alloc.deallocate(_data, _capacity);
-					_data = new_data;
-					_capacity = num_elements;
-    			}
 				
-    			for (size_type i = 0; i < num_elements; i++) {
-        			_alloc.construct(_data + i, *first);
-					first++;
+    			while (first != last) {
+        			push_back(*first);
+        			++first;
     			}
-				_size = num_elements;
 			}	
 			///END_ASSIGN///
 			
