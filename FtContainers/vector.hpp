@@ -162,14 +162,14 @@ namespace ft {
 			{
 				if (pos < _size) 
 					return _data[pos];
-				throw std::runtime_error("out ranged element");
+				throw std::out_of_range("out ranged element");
 			};
 			//
 			const_reference at( size_type pos ) const
 			{
 				if (pos < _size) 
 					return _data[pos];
-				throw std::runtime_error("out ranged element");
+				throw std::out_of_range("out ranged element");
 			}
 			//
 			reference operator[]( size_type pos )
