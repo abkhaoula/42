@@ -333,7 +333,20 @@ namespace ft {
 				size_type i = pos - begin();
 
 				if ((_size + count) > _capacity)
-					reserve(_size + count);
+				{
+					if ((_size + count) > max_size())
+						throw std::length_error("allocation capacity exceeded");
+					T	*new_data = _alloc.allocate(_size + count);
+					for (size_type i = 0; i < _size; i++)
+					{
+						_alloc.construct(&new_data[i], _data[i]);
+						_alloc.destroy(&_data[i]);
+					}
+					if(_data)
+						_alloc.deallocate(_data, _capacity);
+					_data = new_data;
+					_capacity = _size + count;
+				}
 				for (size_type j = count + _size - 1; j > i + count - 1; j--)
 				{
 					_alloc.construct(&_data[j], _data[j - count]);
