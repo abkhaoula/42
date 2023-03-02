@@ -53,8 +53,9 @@ namespace ft {
 			explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator()): _alloc(alloc), _capacity(count), _size(count), _data(NULL)
 			{
 				if (_capacity > max_size())
-					throw std::runtime_error("allocation capacity exceeded");
-				_data = _alloc.allocate(_capacity);
+					throw std::length_error("allocation capacity exceeded");
+				if (_capacity)
+					_data = _alloc.allocate(_capacity);
 				for (size_type i = 0; i < _size; ++i) {
             		_alloc.construct(_data + i, value);
         		}
@@ -116,7 +117,7 @@ namespace ft {
 			void assign(size_type count, const T& value)
 			{
 				if (count > max_size())
-					throw std::runtime_error("allocation capacity exceeded");
+					throw std::length_error("allocation capacity exceeded");
 				clear();
 				if (count > _capacity) {
 					T* new_data = _alloc.allocate(count);
@@ -278,7 +279,7 @@ namespace ft {
 				if (new_cap <= _capacity)
 					return ;
 				if (new_cap > max_size())
-					throw std::runtime_error("allocation capacity exceeded");
+					throw std::length_error("allocation capacity exceeded");
 				T	*new_data = _alloc.allocate(new_cap);
 				for (size_type i = 0; i < _size; i++)
 				{
@@ -378,7 +379,7 @@ namespace ft {
 				if (_size == _capacity)
 				{
 					if (_size + 1 > max_size())
-						throw std::runtime_error("allocation capacity exceeded");
+						throw std::length_error("allocation capacity exceeded");
 					T	*new_data = _alloc.allocate(_size + 1);
 					for (size_type i = 0; i < _size; i++)
 					{
