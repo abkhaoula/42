@@ -273,7 +273,6 @@ namespace ft {
 
 			///ALLOC_OP///
 			//
-			template< class InputIt >
         	void reserve( size_type new_cap )
 			{
 				if (new_cap <= _capacity)
