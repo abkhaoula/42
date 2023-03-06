@@ -72,7 +72,8 @@ namespace ft {
 			//
 			vector( const vector& other ): _alloc(other._alloc), _capacity(other._capacity), _size(other._size), _data(NULL)
     		{
-        		_data = _alloc.allocate(_capacity);
+        		if (_capacity)
+				_data = _alloc.allocate(_capacity);
         		for (size_type i = 0; i < _capacity; ++i) {
             		_alloc.construct(_data + i, other._data[i]);
         		}
@@ -285,7 +286,8 @@ namespace ft {
 					_alloc.construct(&new_data[i], _data[i]);
 					_alloc.destroy(&_data[i]);
 				}
-				_alloc.deallocate(_data, _capacity);
+				if (_data)
+					_alloc.deallocate(_data, _capacity);
 				_data = new_data;
 				_capacity = new_cap;
 			}
