@@ -411,10 +411,28 @@ namespace ft {
 			//
 			void resize( size_type count, T value = T())
 			{
-				while (count < _size)
-					pop_back();
-				while (count > _size)
-					push_back(value);
+				if (count > _size)
+				{
+					if (count > _capacity)
+					{
+						if (count > _capacity * 2) //_size
+							this->reserve(count);
+						else if (_capacity > 0) //_size
+							this->reserve(_capacity * 2); //_size
+						else
+							this->reserve(1);
+					}
+
+					for (size_type i = _size ; i < count ; i++)
+						_alloc.construct(_data + i, value);
+				}
+				else
+				{
+					for (size_type i = count ; i < _size ; i++)
+						_alloc.destroy(_data + i);
+				}
+
+				_size = count;
 			}
 			//
 			void swap(vector& other)
