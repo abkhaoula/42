@@ -73,7 +73,7 @@ namespace ft {
 			vector( const vector& other ): _alloc(other._alloc), _capacity(other._capacity), _size(other._size), _data(NULL)
     		{
         		if (_capacity)
-				_data = _alloc.allocate(_capacity);
+					_data = _alloc.allocate(_capacity);
         		for (size_type i = 0; i < _capacity; ++i) {
             		_alloc.construct(_data + i, other._data[i]);
         		}
@@ -97,17 +97,20 @@ namespace ft {
 			vector& operator=( const vector& other )
 			{
 				if (this != &other) {
-            		clear();
-					if(_data)
-            			_alloc.deallocate(_data, _capacity);
-            		_alloc = other._alloc;
-            		_capacity = other._capacity;
+					for (size_type i = 0 ; i < _size ; i++)
+						_alloc.destroy(_data + i);
+
+					if (other._size > _capacity)
+					{
+						if (_data)
+							_alloc.deallocate(_data, _capacity);
+						_capacity = other._size;
+						_data = _alloc.allocate(_capacity);
+					}
+
 					_size = other._size;
-					if(_capacity)
-            			_data = _alloc.allocate(_capacity);
-            		for (size_type i = 0; i < _capacity; ++i) {
-                		_alloc.construct(_data + i, other._data[i]);
-            		}
+					for (size_type i = 0 ; i < _size ; i++)
+						_alloc.construct(_data + i, other[i]);
         		}
         		return *this;
 			}
