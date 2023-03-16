@@ -64,8 +64,27 @@ namespace ft {
 			template< class InputIt >
 			vector( InputIt first, InputIt last, const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0 ) : _alloc(alloc)
 			{
+				_size = 0;
+				_capacity = 0;
+				_data = NULL;
     			while (first != last) {
-        			push_back(*first);
+					if (_size == _capacity)
+					{
+						if (_capacity + 1 > max_size())
+							throw std::length_error("allocation capacity exceeded");
+						T	*new_data = _alloc.allocate(_capacity + 1);
+						for (size_type i = 0; i < _size; i++)
+						{
+							_alloc.construct(&new_data[i], _data[i]);
+							_alloc.destroy(&_data[i]);
+						}
+						if  (_data)
+							_alloc.deallocate(_data, _capacity);
+						_data = new_data;
+						_capacity = _capacity + 1 ;
+					}
+					_size++;
+					_alloc.construct(_data + _size - 1, *first);
         			++first;
     			}
 			}
@@ -141,9 +160,25 @@ namespace ft {
 			template< class InputIt >
 			void assign( InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0) {
 				clear();
-				
+
     			while (first != last) {
-        			push_back(*first);
+        			if (_size == _capacity)
+					{
+						if (_capacity + 1 > max_size())
+							throw std::length_error("allocation capacity exceeded");
+						T	*new_data = _alloc.allocate(_capacity + 1);
+						for (size_type i = 0; i < _size; i++)
+						{
+							_alloc.construct(&new_data[i], _data[i]);
+							_alloc.destroy(&_data[i]);
+						}
+						if  (_data)
+							_alloc.deallocate(_data, _capacity);
+						_data = new_data;
+						_capacity = _capacity + 1 ;
+					}
+					_size++;
+					_alloc.construct(_data + _size - 1, *first);
         			++first;
     			}
 			}	
@@ -261,6 +296,9 @@ namespace ft {
 			//
 			size_type max_size() const
 			{
+				size_type	sizeOf = sizeof( value_type );
+				if ( sizeOf <= 1 )
+					return ( _alloc.max_size() / 2 );
 				return _alloc.max_size();
 			}
 			//
@@ -338,9 +376,12 @@ namespace ft {
 
 				if ((_size + count) > _capacity)
 				{
-					if ((_size + count) > max_size())
+					size_type newCap = _size + count;
+					if (2 * _capacity > _size + count)
+						newCap = 2 * _capacity;
+					if (2 * _capacity > max_size() || (_size + count) > max_size() )
 						throw std::length_error("allocation capacity exceeded");
-					T	*new_data = _alloc.allocate(_size + count);
+					T	*new_data = _alloc.allocate(newCap);
 					for (size_type i = 0; i < _size; i++)
 					{
 						_alloc.construct(&new_data[i], _data[i]);
@@ -349,7 +390,7 @@ namespace ft {
 					if(_data)
 						_alloc.deallocate(_data, _capacity);
 					_data = new_data;
-					_capacity = _size + count;
+					_capacity = newCap;
 				}
 				for (size_type j = count + _size - 1; j > i + count - 1; j--)
 				{
@@ -375,8 +416,34 @@ namespace ft {
 				difference_type offset = pos - begin();
     
     			for (; first != last; ++first) {
-        			insert(begin() + offset, *first);
-        		++offset;
+        			size_type i = (begin() + offset) - begin();
+
+					if ((_size + 1) > _capacity)
+					{
+						if ((_size + 1) > max_size() )
+							throw std::length_error("allocation capacity exceeded");
+						T	*new_data = _alloc.allocate(_size + 1);
+						for (size_type i = 0; i < _size; i++)
+						{
+							_alloc.construct(&new_data[i], _data[i]);
+							_alloc.destroy(&_data[i]);
+						}
+						if(_data)
+							_alloc.deallocate(_data, _capacity);
+						_data = new_data;
+						_capacity = _size + 1;
+					}
+					for (size_type j = _size; j > i; j--)
+					{
+						_alloc.construct(&_data[j], _data[j - 1]);
+						_alloc.destroy(&_data[j - 1]);
+					}
+					for (size_type k = i; k < i + 1; k++)
+					{
+						_alloc.construct(&_data[k], *first);
+						_size++;
+					}
+        				++offset;
     			}
     
     			return begin() + offset;
@@ -386,9 +453,15 @@ namespace ft {
 			{
 				if (_size == _capacity)
 				{
-					if (_size + 1 > max_size())
+					size_type	newCap = _capacity * 2;
+
+					if ( !newCap )
+					{
+						newCap = 1;
+					}
+					if (_capacity * 2 > max_size())
 						throw std::length_error("allocation capacity exceeded");
-					T	*new_data = _alloc.allocate(_size + 1);
+					T	*new_data = _alloc.allocate(newCap);
 					for (size_type i = 0; i < _size; i++)
 					{
 						_alloc.construct(&new_data[i], _data[i]);
@@ -397,7 +470,7 @@ namespace ft {
 					if  (_data)
 						_alloc.deallocate(_data, _capacity);
 					_data = new_data;
-					_capacity = _size + 1 ;
+					_capacity = newCap ;
 				}
 				_size++;
 				_alloc.construct(_data + _size - 1, value);
